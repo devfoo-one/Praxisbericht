@@ -25,6 +25,7 @@
 ]{scrreprt}%
 
 \usepackage[utf8]{inputenc}		% defines file's character encoding
+\usepackage{paralist}          % for compactitem itemization
 
 % **************************************************
 % Debug LaTeX Information
@@ -126,6 +127,7 @@
 \input{content/chapter1_einleitung}
 \input{content/chapter2_taetigkeitsbereiche}
 \input{content/chapter3_fazit}
+\input{content/chapter4_anlagen}
 \cleardoublepage
 
 % --------------------------
@@ -137,15 +139,14 @@
 \setlength{\biblabelsep}{0pt}
 \setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
 \printbibliography[nottype=online]
-\printbibliography[heading=subbibliography,title={Webseiten},type=online,prefixnumbers={@}]
+\printbibliography[heading=subbibliography,title={Online-Quellen},type=online,prefixnumbers={@}]
 }
 \cleardoublepage
 
-\listoffigures
-\cleardoublepage
-
-\listoftables
-\cleardoublepage
+%\listoffigures
+%\cleardoublepage
+%\listoftables
+%\cleardoublepage
 
 \input{content/declaration}
 %\clearpage
