@@ -24,6 +24,8 @@
 	draft=false,				% value for draft version
 ]{scrreprt}%
 
+\usepackage[utf8]{inputenc}		% defines file's character encoding
+
 % **************************************************
 % Debug LaTeX Information
 % **************************************************
@@ -32,35 +34,35 @@
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
-\newcommand{\thesisTitle}{The Clean Thesis Style}
-\newcommand{\thesisName}{Ricardo Langner}
-\newcommand{\thesisSubject}{Documentation}
+\newcommand{\thesisTitle}{Praxisbericht}
+\newcommand{\thesisName}{Tom Oberhauser}
+\newcommand{\thesisSubject}{Praktikum beim Deutschen Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)}
 \newcommand{\thesisDate}{August 26, 2015}
 \newcommand{\thesisVersion}{My First Draft}
 
-\newcommand{\thesisFirstReviewer}{Jane Doe}
-\newcommand{\thesisFirstReviewerUniversity}{\protect{Clean Thesis Style University}}
-\newcommand{\thesisFirstReviewerDepartment}{Department of Clean Thesis Style}
+\newcommand{\thesisFirstReviewer}{Prof. Christoph Knabe}
+\newcommand{\thesisFirstReviewerUniversity}{\protect{Beuth Hochschule für Technik Berlin}}
+\newcommand{\thesisFirstReviewerDepartment}{Fachbereich VI - Informatik und Medien}
 
-\newcommand{\thesisSecondReviewer}{John Doe}
-\newcommand{\thesisSecondReviewerUniversity}{\protect{Clean Thesis Style University}}
-\newcommand{\thesisSecondReviewerDepartment}{Department of Clean Thesis Style}
+\newcommand{\thesisSecondReviewer}{Dr. Philippe Thomas}
+\newcommand{\thesisSecondReviewerUniversity}{\protect{Deutsches Forschungszentrum für Künstliche Intelligenz}}
+\newcommand{\thesisSecondReviewerDepartment}{Forschungsgruppe Sprachtechnologien (DFKI-LT)}
 
-\newcommand{\thesisFirstSupervisor}{Jane Doe}
-\newcommand{\thesisSecondSupervisor}{John Smith}
+%\newcommand{\thesisFirstSupervisor}{Jane Doe}
+%\newcommand{\thesisSecondSupervisor}{John Smith}
 
-\newcommand{\thesisUniversity}{\protect{Clean Thesis Style University}}
-\newcommand{\thesisUniversityDepartment}{Department of Clean Thesis Style}
-\newcommand{\thesisUniversityInstitute}{Institut for Clean Thesis Dev}
-\newcommand{\thesisUniversityGroup}{Clean Thesis Group (CTG)}
-\newcommand{\thesisUniversityCity}{City}
-\newcommand{\thesisUniversityStreetAddress}{Street address}
-\newcommand{\thesisUniversityPostalCode}{Postal Code}
+\newcommand{\thesisUniversity}{\protect{Deutsches Forschungszentrum für Künstliche Intelligenz}}
+\newcommand{\thesisUniversityDepartment}{Forschungsgruppe Sprachtechnologien (DFKI-LT)}
+\newcommand{\thesisUniversityInstitute}{Projekt ``Smart Data for Mobility'' (SD4M)}
+%\newcommand{\thesisUniversityGroup}{Clean Thesis Group (CTG)}
+\newcommand{\thesisUniversityCity}{Berlin}
+%\newcommand{\thesisUniversityStreetAddress}{Street address}
+%\newcommand{\thesisUniversityPostalCode}{Postal Code}
 
 % **************************************************
 % Load and Configure Packages
 % **************************************************
-\usepackage[utf8]{inputenc}		% defines file's character encoding
+
 \usepackage[ngerman]{babel} % babel system, adjust the language of the content
 \usepackage[					% clean thesis style
 	figuresep=colon,%
@@ -121,11 +123,9 @@
 \setcounter{page}{1}			% set page counter
 \pagestyle{maincontentstyle} 	% fancy header and footer
 
-\input{content/chapter-introduction} % INCLUDE: introduction
-\input{content/chapter-related-work} % INCLUDE: related work
-\input{content/chapter-system}	% INCLUDE: system
-\input{content/chapter-concepts} % INCLUDE: concepts
-\input{content/chapter-conclusion} % INCLUDE: conclusion
+\input{content/chapter1_einleitung}
+\input{content/chapter2_taetigkeitsbereiche}
+\input{content/chapter3_fazit}
 \cleardoublepage
 
 % --------------------------
@@ -148,8 +148,8 @@
 \cleardoublepage
 
 \input{content/declaration}
-\clearpage
-\newpage
+%\clearpage
+%\newpage
 \mbox{}
 
 % **************************************************
