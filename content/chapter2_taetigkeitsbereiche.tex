@@ -54,16 +54,19 @@ vorhanden sein.
 Diese Daten sollen anschließend zur geographischen Verortung von Straßen aus Tweets genutzt werden.
 
 \subsubsection{Lösung}
-Für meinen Anwendungsfall, die Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben. 
-Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data}) aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten).
-
-Eine physikalisch vorhandene Straße ist wird durch mehrere aneinanderhängende \textit{Ways} repräsentiert.
-Wenn sich im Straßenverlauf ein Attribut (Ein \textit{Tag}) der Straße ändert, zum Beispiel ein hinzukommender Radweg, muss ein neues Teilstück diese neuen Gegebenheiten abbilden. Ein Beispiel hierfür findet sich in Anlage \ref{sec:appenix:osm:streets}.
-
-
+Für meinen Anwendungsfall, die Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben.
+Die zwei populärsten Werkzeuge sind hierbei \textbf{osm2pgsql}\footnote{https://github.com/openstreetmap/osm2pgsql} und \textbf{Osmosis}\footnote{https://github.com/openstreetmap/osmosis}.
+Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten). Die Importwerkzeuge haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
+Das ermöglicht die direkte Extraktion der Geometrie eines Ways ohne sich für jeden Way die Koordinaten aus den Daten selbst aggregieren zu müssen.
+Beide Werkzeuge erzeugen unterschiedliche Datenbankschemata.
+Das DFKI besitzt Datenbanken, in der die OpenStreetMap Daten Deutschlands mit osm2pgsql sowie Osmosis importiert wurden.
+Ich informierte mich darüber, welches Schema am verlustfreisten ist.
 \begin{quote}
 ``osm2pgsql is mainly written for rendering data with data. So it only imports tags which are going to be useful for rendering. ... whereas osmosis and osmium more geared towards truthfully representing a full OSM data set.''\footnote{http://giswiki.hsr.ch/Osm2pgsql}
 \end{quote}
+Ich entschied mich für die Datenbank im Osmosis-Schema, da diese den wahren Datenbestand am besten repräsentiert.\\
+Eine physikalisch vorhandene Straße ist wird durch mehrere aneinanderhängende \textit{Ways} repräsentiert.
+Wenn sich im Straßenverlauf ein Attribut (Ein \textit{Tag}) der Straße ändert, zum Beispiel ein hinzukommender Radweg, muss ein neues Teilstück diese neuen Gegebenheiten abbilden. Ein Beispiel hierfür findet sich in Anlage \ref{sec:appenix:osm:streets}.
  
 \subsubsection{Schwierigkeiten}
 Das Testen auf einer kleinen Datenbank beschleunigte zwar die Entwicklung, aber erst der erste Test auf der Hauptdatenbank zeigte massive Performanceprobleme auf.

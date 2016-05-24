@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>2AEED626-2D34-416E-84E5-08C3AE62BF93</UUID>
-        <nextObjectID>118</nextObjectID>
+        <nextObjectID>119</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -65,7 +65,7 @@
         <attribute name="name" type="string">Praxisbericht</attribute>
         <attribute name="folder" type="string">/Users/tom/Dropbox/SYNC/SYNC IPAD/Studium/6. Semester/Praktikum/Bericht</attribute>
         <relationship name="mainfile" type="1/1" destination="FILE" idrefs="z109"></relationship>
-        <relationship name="selected" type="1/1" destination="FILE" idrefs="z117"></relationship>
+        <relationship name="selected" type="1/1" destination="FILE" idrefs="z108"></relationship>
         <relationship name="settings" type="1/1" destination="SETTINGS" idrefs="z103"></relationship>
         <relationship name="uisettings" type="1/1" destination="UISETTINGS" idrefs="z104"></relationship>
         <relationship name="items" type="0/0" destination="PROJECTITEM" idrefs="z114 z110 z105 z109 z113 z117 z112 z116 z115 z111 z108"></relationship>
@@ -88,7 +88,7 @@
         <attribute name="showlogwarningitems" type="bool">1</attribute>
         <attribute name="showloginfoitems" type="bool">0</attribute>
         <attribute name="showlogerroritems" type="bool">1</attribute>
-        <attribute name="pdfviewscrollrect" type="string">{{0, 4979.7869282000975}, {604, 864.54901960764164}}</attribute>
+        <attribute name="pdfviewscrollrect" type="string">{{0, 9421.0784313754593}, {604, 864.5490196077335}}</attribute>
         <attribute name="showpdfthumbnails" type="bool">0</attribute>
         <attribute name="selectedcontrolstab" type="int16">0</attribute>
         <attribute name="maxoutlinedepth" type="int16">7</attribute>
@@ -118,11 +118,11 @@
     </object>
     <object type="TEXFILE" id="z108">
         <attribute name="visiblerect" type="string">{{0, 0}, {892, 576}}</attribute>
-        <attribute name="cursor" type="string">{2349, 0}</attribute>
+        <attribute name="cursor" type="string">{2263, 0}</attribute>
         <attribute name="wasopen" type="bool">1</attribute>
-        <attribute name="lasteditdate" type="date">484599603.82715898752212524414</attribute>
+        <attribute name="lasteditdate" type="date">485786210.81973898410797119141</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485707768.80592197179794311523</attribute>
+        <attribute name="fileloaddate" type="date">485786212.09581702947616577148</attribute>
         <attribute name="extension" type="string">tex</attribute>
         <attribute name="sortindex" type="int32">5</attribute>
         <attribute name="name" type="string">chapter1_einleitung.tex</attribute>
@@ -135,12 +135,12 @@
         <relationship name="bookmarks" type="0/0" destination="BOOKMARK"></relationship>
     </object>
     <object type="TEXFILE" id="z109">
-        <attribute name="visiblerect" type="string">{{0, 511}, {892, 576}}</attribute>
-        <attribute name="cursor" type="string">{1502, 0}</attribute>
+        <attribute name="visiblerect" type="string">{{0, 0}, {886, 576}}</attribute>
+        <attribute name="cursor" type="string">{1412, 0}</attribute>
         <attribute name="wasopen" type="bool">6</attribute>
-        <attribute name="lasteditdate" type="date">485707789.65094602108001708984</attribute>
+        <attribute name="lasteditdate" type="date">485786073.67556101083755493164</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485707906.14460498094558715820</attribute>
+        <attribute name="fileloaddate" type="date">485786074.57293999195098876953</attribute>
         <attribute name="extension" type="string">tex</attribute>
         <attribute name="sortindex" type="int32">8</attribute>
         <attribute name="name" type="string">main.tex</attribute>
@@ -204,12 +204,12 @@
     </object>
     <object type="TEXFILE" id="z114">
         <attribute name="wasopen" type="bool">2</attribute>
-        <attribute name="visiblerect" type="string">{{0, 736}, {892, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">485781163.80447202920913696289</attribute>
+        <attribute name="visiblerect" type="string">{{0, 633}, {892, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">485783153.25469797849655151367</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485781165.19844800233840942383</attribute>
+        <attribute name="fileloaddate" type="date">485783155.16328197717666625977</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{4441, 0}</attribute>
+        <attribute name="cursor" type="string">{3755, 397}</attribute>
         <attribute name="sortindex" type="int32">4</attribute>
         <attribute name="name" type="string">chapter2_taetigkeitsbereiche.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -218,7 +218,7 @@
         <relationship name="project" type="1/1" destination="PROJECT" idrefs="z102"></relationship>
         <relationship name="mainfileofproject" type="1/1" destination="PROJECT"></relationship>
         <relationship name="children" type="0/0" destination="PROJECTITEM"></relationship>
-        <relationship name="bookmarks" type="0/0" destination="BOOKMARK"></relationship>
+        <relationship name="bookmarks" type="0/0" destination="BOOKMARK" idrefs="z119"></relationship>
     </object>
     <object type="TEXFILE" id="z115">
         <attribute name="wasopen" type="bool">-1</attribute>
@@ -241,11 +241,11 @@
     <object type="FILE" id="z116">
         <attribute name="wasopen" type="bool">3</attribute>
         <attribute name="visiblerect" type="string">{{0, 0}, {892, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">485777871.30557799339294433594</attribute>
+        <attribute name="lasteditdate" type="date">485783874.52985399961471557617</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485777872.65585398674011230469</attribute>
+        <attribute name="fileloaddate" type="date">485783880.44601601362228393555</attribute>
         <attribute name="extension" type="string">bib</attribute>
-        <attribute name="cursor" type="string">{739, 0}</attribute>
+        <attribute name="cursor" type="string">{1112, 0}</attribute>
         <attribute name="sortindex" type="int32">0</attribute>
         <attribute name="name" type="string">bib-refs.bib</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -258,12 +258,12 @@
     </object>
     <object type="TEXFILE" id="z117">
         <attribute name="wasopen" type="bool">4</attribute>
-        <attribute name="visiblerect" type="string">{{0, 0}, {892, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">485781306.76965302228927612305</attribute>
+        <attribute name="visiblerect" type="string">{{0, 0}, {886, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">485786136.23039597272872924805</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485781312.97153198719024658203</attribute>
+        <attribute name="fileloaddate" type="date">485786138.75436800718307495117</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{2028, 0}</attribute>
+        <attribute name="cursor" type="string">{6295, 0}</attribute>
         <attribute name="sortindex" type="int32">2</attribute>
         <attribute name="name" type="string">chapter4_anlagen.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -279,5 +279,11 @@
 </attribute>
         <attribute name="linenumber" type="int64">42</attribute>
         <relationship name="parentfile" type="1/1" destination="FILE"></relationship>
+    </object>
+    <object type="BOOKMARK" id="z119">
+        <attribute name="text" type="string">Das DFKI besitzt Datenbanken, in der die OpenStreetMap Daten Deutschlands mit osm2pgsql sowie Osmosis importiert wurden.
+</attribute>
+        <attribute name="linenumber" type="int64">62</attribute>
+        <relationship name="parentfile" type="1/1" destination="FILE" idrefs="z114"></relationship>
     </object>
 </database>
