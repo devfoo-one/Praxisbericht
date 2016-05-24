@@ -49,7 +49,7 @@ Zur Speicherung der Daten werden die Elemente \textit{Nodes}, \textit{Ways} und 
   \item \textbf{Ways}, ein Linienzug zwischen mehreren Punkten. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert
   \item \textbf{Relations}, eine logische Gruppierung mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen oder ein Bahnhof. 
 \end{compactitem}
-Alle Elemente können wiederum durch \textit{Tags} mit Eigenschaften versehen werden.
+Alle Elemente können wiederum durch Key-Value Paare, sogenannte \textit{Tags}, mit Eigenschaften versehen werden.
 
 \subsubsection{Beispiel eines Nodes}
 \begin{lstlisting}
@@ -118,3 +118,87 @@ Alle Elemente können wiederum durch \textit{Tags} mit Eigenschaften versehen we
 
 \section{Beispiel einer Straße in OpenStreetMap}
 \label{sec:appenix:osm:streets}
+Im folgenden Abschnitt soll am Beispiel eines Teilabschnittes einer Straße (siehe Abbildung \ref{fig:osm_streets_1}) gezeigt werden, in welcher Form Straßen innerhalb der OpenStreetMap Daten vorliegen.
+Eine Straße ist üblicherweise eine Verkettung aus \textit{Ways}.
+\begin{figure}[htb]
+  \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streets_1.jpg}}
+   \caption{Teilausschnitt der Greifswalder Straße}
+   \label{fig:osm_streets_1}
+\end{figure}
+Die Unterteilung einer Straße in mehrere Ways ist notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind. 
+Der hier gezeigte Teilabschnitt ist ebenfalls bereits in zwei separate Way-Elemente mit den ID´s \texttt{241186022} und \texttt{4615358} untergliedert (Abbildung \ref{fig:osm_streets_2}).
+\begin{figure}[htb]
+  \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streets_2.jpg}}
+   \caption{Der Teilausschnitt besteht in den Daten aus zwei separaten Ways}
+   \label{fig:osm_streets_2}
+\end{figure}
+Dies war notwendig, da sich die Anzahl der Fahrspuren geändert hat.
+Der Tag mit dem Key ``lanes'' hat seinen Wert von \texttt{2} auf \texttt{3} geändert. Die Änderung ist im Listing \ref{code:osm_streets} auf Zeile 28 und 45 ersichtlich.
+\lstset{
+  numbers=left,
+  numbersep=5pt,
+  caption=Vollständige Daten des Straßenabschnitts,
+  label=code:osm_streets
+}
+\begin{lstlisting}
+<node id="101220587" visible="true" version="11" changeset="18256244" timestamp="2013-10-08T22:00:56Z" user="Peter Maiwald" uid="90528" lat="52.5464853" lon="13.4424534"/>
+<node id="287651010" visible="true" version="5" changeset="23075493" timestamp="2014-06-22T09:26:32Z" user="atpl_pilot" uid="881429" lat="52.5459138" lon="13.4438910"/>
+<node id="3922178749" visible="true" version="1" changeset="36300926" timestamp="2016-01-01T16:28:14Z" user="Balgofil" uid="95702" lat="52.5458508" lon="13.4440518">
+ <tag k="bus" v="yes"/>
+ <tag k="name" v="Greifswalder Straße/Ostseestraße"/>
+ <tag k="public_transport" v="stop_position"/>
+ <tag k="ref:BVG" v="105416"/>
+ <tag k="website" v="http://qr.bvg.de/h105416"/>
+ <tag k="wheelchair" v="limited"/>
+</node>
+<node id="3922178787" visible="true" version="1" changeset="36300926" timestamp="2016-01-01T16:28:15Z" user="Balgofil" uid="95702" lat="52.5456743" lon="13.4445025">
+ <tag k="crossing" v="traffic_signals"/>
+ <tag k="highway" v="crossing"/>
+</node>
+<node id="29269510" visible="true" version="11" changeset="36300926" timestamp="2016-01-01T16:28:39Z" user="Balgofil" uid="95702" lat="52.5456175" lon="13.4446475">
+ <tag k="TMC:cid_58:tabcd_1:Class" v="Point"/>
+ <tag k="TMC:cid_58:tabcd_1:Direction" v="negative"/>
+ <tag k="TMC:cid_58:tabcd_1:LCLversion" v="9.00"/>
+ <tag k="TMC:cid_58:tabcd_1:LocationCode" v="21554"/>
+ <tag k="TMC:cid_58:tabcd_1:NextLocationCode" v="21555"/>
+ <tag k="TMC:cid_58:tabcd_1:PrevLocationCode" v="21553"/>
+</node>
+<way id="241186022" visible="true" version="4" changeset="35323067" timestamp="2015-11-15T08:45:00Z" user="anbr" uid="43566">
+ <nd ref="287651010"/>
+ <nd ref="101220587"/>
+ <tag k="cycleway" v="lane"/>
+ <tag k="highway" v="primary"/>
+ <tag k="lanes" v="3"/>
+ <tag k="maxspeed" v="50"/>
+ <tag k="name" v="Ostseestraße"/>
+ <tag k="oneway" v="yes"/>
+ <tag k="postal_code" v="10409"/>
+ <tag k="ref" v="L 1004"/>
+ <tag k="sidewalk" v="right"/>
+ <tag k="turn:lanes" v="left|none|none"/>
+ <tag k="wikipedia" v="de:Ostseestraße"/>
+</way>
+<way id="4615358" visible="true" version="27" changeset="36300926" timestamp="2016-01-01T16:28:33Z" user="Balgofil" uid="95702">
+ <nd ref="29269510"/>
+ <nd ref="3922178787"/>
+ <nd ref="3922178749"/>
+ <nd ref="287651010"/>
+ <tag k="cycleway" v="lane"/>
+ <tag k="highway" v="primary"/>
+ <tag k="lanes" v="2"/>
+ <tag k="maxspeed" v="50"/>
+ <tag k="name" v="Ostseestraße"/>
+ <tag k="oneway" v="yes"/>
+ <tag k="postal_code" v="10409"/>
+ <tag k="ref" v="L 1004"/>
+ <tag k="sidewalk" v="right"/>
+ <tag k="wikipedia" v="de:Ostseestraße"/>
+</way>
+\end{lstlisting}
+\lstset{
+  numbers=none,
+  caption=,
+  label=
+  }
