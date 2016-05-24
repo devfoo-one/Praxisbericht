@@ -43,7 +43,7 @@ Meine Aufgaben während des Praktikums lassen sich in 3 Teilbereiche gliedern. Z
 \subsubsection{Aufgabe}
 Meine erste Aufgabe bestand darin, eine Liste aller Straßen Deutschlands inclusive dazugehöriger Geodaten zu erstellen.
 Es sollte eine Java Anwendung erstellt werden, welche via Kommandozeilenargumenten konfiguriert wird, und die entsprechenden Ergebnisse in einer CSV-Datei ablegt.
-Im Ergebnis sollten pro zusammenhängender Straße die Daten
+Im Ergebnis sollten pro zusammenhängendem Straßensegment die Daten
 \begin{compactitem}
   \item \textbf{ID}, eine fortlaufende Nummer
   \item \textbf{Name}, der Name der Straße
@@ -59,15 +59,57 @@ Die zwei populärsten Werkzeuge sind hierbei \textbf{osm2pgsql}\footnote{https:/
 Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten). Die Importwerkzeuge haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
 Das ermöglicht die direkte Extraktion der Geometrie eines Ways ohne sich für jeden Way die Koordinaten aus den Daten selbst aggregieren zu müssen.
 Beide Werkzeuge erzeugen unterschiedliche Datenbankschemata.
+
 Das DFKI besitzt Datenbanken, in der die OpenStreetMap Daten Deutschlands mit osm2pgsql sowie Osmosis importiert wurden.
 Ich informierte mich darüber, welches Schema am verlustfreisten ist.
 \begin{quote}
-``osm2pgsql is mainly written for rendering data with data. So it only imports tags which are going to be useful for rendering. ... whereas osmosis and osmium more geared towards truthfully representing a full OSM data set.''\footnote{http://giswiki.hsr.ch/Osm2pgsql}
+``osm2pgsql is mainly written for rendering data with data. So it only imports tags which are going to be useful for rendering. ... whereas osmosis and osmium more geared towards truthfully representing a full OSM data set.'' \cite{WEB:Giswiki:Osm2pgsql:2015}
 \end{quote}
-Ich entschied mich für die Datenbank im Osmosis-Schema, da diese den wahren Datenbestand am besten repräsentiert.\\
+
+Ich entschied mich für die Datenbank im Osmosis-Schema, da diese den wahren Datenbestand am besten repräsentiert.
+
 Eine physikalisch vorhandene Straße ist wird durch mehrere aneinanderhängende \textit{Ways} repräsentiert.
-Wenn sich im Straßenverlauf ein Attribut (Ein \textit{Tag}) der Straße ändert, zum Beispiel die zulässige Höchstgeschwindigkeit, muss ein neues Teilstück diese neuen Gegebenheiten abbilden. Ein Beispiel für eine Straße findet sich sich in Anlage \ref{sec:appenix:osm:streets}.
- 
+Wenn sich im Straßenverlauf ein Attribut (Ein \textit{Tag}) der Straße ändert, zum Beispiel die zulässige Höchstgeschwindigkeit, muss ein neues Teilstück diese neuen Gegebenheiten abbilden.
+Ein Beispiel dafür findet sich sich in Anlage \ref{sec:appenix:osm:streets}.
+
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streetgroups_1.png}}
+   \caption{Kartenauszug verschiedener Straßengruppen am Beispiel ``Berliner Straße''}}
+   \label{fig:ose:osm_streetgroups_1}
+ \end{figure}
+
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=0.8\textwidth]{gfx/osm_streetgroups_2.jpg}}
+   \caption{Schematische Darstellung des Problems der Weggruppenfindung}}
+   \label{fig:ose:osm_streetgroups_2}
+ \end{figure}
+
+
+\subsubsection{Programmstruktur}
+Für viele Problemstellungen innerhalb des zu erstellenden Programms wurden externe Bibliotheken verwendet (Siehe Tabelle \ref{tab:OsmosisStreetExtractor:Libraries}).
+Die Ahängigkeiten wurden mit \textit{Apache Maven}\footnote{http://maven.apache.org} verwaltet.
+\begin{table}[htb]
+\centering
+\caption{verwendete externe Bibliotheken}
+\label{tab:OsmosisStreetExtractor:Libraries}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Problem}                          & \textbf{verwendete Bibliothek}     \\ \hline
+Datenbankanbindung PostgreSQL             & PostgreSQL JDBC Driver JDBC 4.1    \\ \hline
+Verarbeitung von Kommandozeilenargumenten & Apache Commons CLI                 \\ \hline
+Verarbeitung von JSON Objekten            & com.googlecode.json-simple         \\ \hline
+Aufbau eines Graphen                      & org.jgrapht.jgrapht-core           \\ \hline
+\end{tabular}
+\end{table}
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/ose_uml.png}}
+   \caption{Klassendiagramm des fertigen Programms}}
+   \label{fig:ose:uml}
+ \end{figure}
+  
 \subsubsection{Schwierigkeiten}
 Das Testen auf einer kleinen Datenbank beschleunigte zwar die Entwicklung, aber erst der erste Test auf der Hauptdatenbank zeigte massive Performanceprobleme auf.
 Ich hatte wollte meine Anwendung möglichst speicherschonend gestalten und holte \\... meine Straßenobjekte einzeln aus der Datenbank...\\ Eine Messung zeigte jedoch dass die Datenbankabfrage der Flaschenhals \\... mit 300ms Abfragezeit und unter 1ms Verarbeitungszeit\\... also neugeschrieben und alles initial in den RAM zum verarbeiten...
