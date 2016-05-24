@@ -49,7 +49,7 @@ Zur Speicherung der Daten werden die Elemente \textit{Nodes}, \textit{Ways} und 
   \item \textbf{Ways}, ein Linienzug zwischen mehreren Punkten. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert
   \item \textbf{Relations}, eine logische Gruppierung mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen oder ein Bahnhof. 
 \end{compactitem}
-Alle Elemente können wiederum durch Key-Value Paare, sogenannte \textit{Tags}, mit Eigenschaften versehen werden.
+Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags}, beschrieben. Hier wird beispielsweise festgelegt, ob ein Way eine Straße abbildet oder einen Fluss.
 
 \subsubsection{Beispiel eines Nodes}
 \begin{lstlisting}
@@ -119,19 +119,20 @@ Alle Elemente können wiederum durch Key-Value Paare, sogenannte \textit{Tags}, 
 \section{Beispiel einer Straße in OpenStreetMap}
 \label{sec:appenix:osm:streets}
 Im folgenden Abschnitt soll am Beispiel eines Teilabschnittes einer Straße (siehe Abbildung \ref{fig:osm_streets_1}) gezeigt werden, in welcher Form Straßen innerhalb der OpenStreetMap Daten vorliegen.
-Eine Straße ist üblicherweise eine Verkettung aus \textit{Ways}.
+Eine Straße ist entweder ein einzelner, oder eine Verkettung aus \textit{Ways} mit gesetztem \texttt{highway} Tag.
+Im Listing \ref{code:osm_streets} Zeile 13 und 44 ist ein Beispiel dafür ersichtlich. Beispielsweise bedeutet der Wert \texttt{''primary''} Bundesstraße oder \texttt{''motorway''} Autobahn.
 \begin{figure}[htb]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streets_1.jpg}}
    \caption{Teilausschnitt der Greifswalder Straße}
    \label{fig:osm_streets_1}
 \end{figure}
-Die Unterteilung einer Straße in mehrere Ways ist notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind. 
+Die Unterteilung einer Straße in mehrere Ways ist mitunter notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. die zulässige Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind. Sofern sich diese Daten im Straßenverlauf ändern, wird dies durch einen separates Way-Element wiedergegeben.
 Der hier gezeigte Teilabschnitt ist ebenfalls bereits in zwei separate Way-Elemente mit den ID´s \texttt{241186022} und \texttt{4615358} untergliedert (Abbildung \ref{fig:osm_streets_2}).
 \begin{figure}[htb]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streets_2.jpg}}
-   \caption{Der Teilausschnitt besteht in den Daten aus zwei separaten Ways}
+   \caption{Beispiel für multiple Ways einer Straße}
    \label{fig:osm_streets_2}
 \end{figure}
 Dies war notwendig, da sich die Anzahl der Fahrspuren geändert hat.

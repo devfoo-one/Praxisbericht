@@ -71,6 +71,18 @@ Ich entschied mich für die Datenbank im Osmosis-Schema, da diese den wahren Dat
 Eine physikalisch vorhandene Straße ist wird durch mehrere aneinanderhängende \textit{Ways} repräsentiert.
 Wenn sich im Straßenverlauf ein Attribut (Ein \textit{Tag}) der Straße ändert, zum Beispiel die zulässige Höchstgeschwindigkeit, muss ein neues Teilstück diese neuen Gegebenheiten abbilden.
 Ein Beispiel dafür findet sich sich in Anlage \ref{sec:appenix:osm:streets}.
+Das Ziel war nun, eine Liste zusammenhängender Ways mit gleichem Name zu aggregieren und diese zu exportieren. Dazu plante ich folgenden Ablauf:
+
+\begin{compactenum}
+  \item Ermittlung aller Straßennamen aus der Datenbank
+  \item Abfrage aller Ways pro Straßenname
+  \item Trennung zusammenhängender Ways in Gruppen
+  \item Export in Zieldatei
+\end{compactenum}
+
+Als kompliziertestes Problem stellte sich die Trennung zusammenhängender Way-Gruppen dar. In Abbildung \ref{fig:osm_streets_1} ist ein Kartenausschnitt mit allen Ways mit dem Name \textit{``Berliner Straße''} dargestellt. 
+
+\textbf{HIER WEITERMACHEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
 
 \begin{figure}[htb]
    \centering
