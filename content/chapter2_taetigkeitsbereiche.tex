@@ -36,7 +36,7 @@ Da ich auf meinem eigenen Notebook entwickeln wollte, installierte ich mir einen
 So konnte ich schneller entwickeln und mit einer wesentlich kleineren Datenbank testen.
 
 \section{Aufgaben}
-Meine Aufgaben während des Praktikums lassen sich in 3 Teilbereiche gliedern. Zunächst sollte ich eine Straßenliste aus OpenStreetMap extrahieren. Anschließend verknüpfte und aggregierte ich Daten, welche von der Deutschen Bahn geliefert wurden, mit Daten aus OpenStreetMap. In den letzten Wochen meiner Praxisphase gab es dann noch verschiedene Datenaufbereitungsaufgaben. Auf diese 3 Themengebiete werden in diesem Abschnitt nun eingegangen.
+Meine Aufgaben während des Praktikums lassen sich in drei Teilbereiche gliedern. Zunächst sollte ich eine Straßenliste aus OpenStreetMap extrahieren. Anschließend verknüpfte und aggregierte ich Daten, welche von der Deutschen Bahn geliefert wurden, mit Daten aus OpenStreetMap. In den letzten Wochen meiner Praxisphase gab es dann noch verschiedene Datenaufbereitungsaufgaben. Auf diese drei Themengebiete werden in diesem Abschnitt nun eingegangen.
 
 \subsection{Extraktion einer Straßenliste aus OpenStreetMap}
 
@@ -80,21 +80,22 @@ Das Ziel war nun, eine Liste zusammenhängender Ways mit gleichem Name zu aggreg
   \item Export in Zieldatei
 \end{compactenum}
 
-Als kompliziertestes Problem stellte sich die Trennung zusammenhängender Way-Gruppen dar. In Abbildung \ref{fig:osm_streets_1} ist ein Kartenausschnitt mit allen Ways mit dem Name \textit{``Berliner Straße''} dargestellt. 
+Als kompliziertestes Problem stellte sich die Trennung zusammenhängender Way-Gruppen dar. In Abbildung~\ref{fig:ose:osm_streetgroups_1} ist ein Kartenausschnitt mit allen Ways mit dem Name \textit{``Berliner Straße''} dargestellt.
 
+Wenn ich jetzt die nächste Abbildung \ref{fig:ose:osm_streetgroups_2} referenziere... was passiert dann? Und die nächste Abbildung \ref{fig:ose:uml} mit dem UML?
 \textbf{HIER WEITERMACHEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
 
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streetgroups_1.png}}
-   \caption{Kartenauszug verschiedener Straßengruppen am Beispiel ``Berliner Straße''}}
+   \caption{Kartenauszug verschiedener Straßengruppen am Beispiel ``Berliner Straße''}
    \label{fig:ose:osm_streetgroups_1}
  \end{figure}
 
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=0.8\textwidth]{gfx/osm_streetgroups_2.jpg}}
-   \caption{Schematische Darstellung des Problems der Weggruppenfindung}}
+   \caption{Schematische Darstellung des Problems der Weggruppenfindung}
    \label{fig:ose:osm_streetgroups_2}
  \end{figure}
 
@@ -115,10 +116,11 @@ Verarbeitung von JSON Objekten            & com.googlecode.json-simple         \
 Aufbau eines Graphen                      & org.jgrapht.jgrapht-core           \\ \hline
 \end{tabular}
 \end{table}
+
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/ose_uml.png}}
-   \caption{Klassendiagramm des fertigen Programms}}
+   \caption{Klassendiagramm des fertigen Programms}
    \label{fig:ose:uml}
  \end{figure}
   
