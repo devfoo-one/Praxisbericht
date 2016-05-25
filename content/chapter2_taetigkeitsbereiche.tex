@@ -34,6 +34,7 @@ Wir klärten, dass Java die geeignetste Sprache zur Lösung meiner Aufgaben war.
 Ebenfalls war eine OpenStreetMap Datenbank mit dem Datenbestand von Deutschland, sowie ein GitLab Repository Server vorhanden.
 Da ich auf meinem eigenen Notebook entwickeln wollte, installierte ich mir einen virtuellen Linux-Server mit einer PostgreSQL Datenbank um einen kleinen Teil der OpenStreetMap Daten lokal auf meinem Rechner zu haben.
 So konnte ich schneller entwickeln und mit einer wesentlich kleineren Datenbank testen.
+Als Java-Entwicklungsumgebung entschied ich mich für \textit{JetBrains IntelliJ IDEA}\footnote{https://www.jetbrains.com/idea/} und zur Arbeit mit den Datenbanken für \textit{JetBrains DataGrip 2016}\footnote{https://www.jetbrains.com/datagrip/}.
 
 \section{Aufgaben}
 Meine Aufgaben während des Praktikums lassen sich in drei Teilbereiche gliedern. Zunächst sollte ich eine Straßenliste aus OpenStreetMap extrahieren. Anschließend verknüpfte und aggregierte ich Daten, welche von der Deutschen Bahn geliefert wurden, mit Daten aus OpenStreetMap. In den letzten Wochen meiner Praxisphase gab es dann noch verschiedene Datenaufbereitungsaufgaben. Auf diese drei Themengebiete werden in diesem Abschnitt nun eingegangen.
@@ -52,6 +53,7 @@ Im Ergebnis sollten pro zusammenhängendem Straßensegment die Daten
 \end{compactitem}
 vorhanden sein.
 Diese Daten sollen anschließend zur geographischen Verortung von Straßen aus Tweets genutzt werden.
+Eine Beispielausgabe des fertigen Programms findet sich in Anhang~\ref{sec:appendix:ose:output}.
 
 \subsubsection{Lösung}
 Für meinen Anwendungsfall, die Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben.
@@ -80,25 +82,70 @@ Das Ziel war nun, eine Liste zusammenhängender Ways mit gleichem Name zu aggreg
   \item Export in Zieldatei
 \end{compactenum}
 
-Als kompliziertestes Problem stellte sich die Trennung zusammenhängender Way-Gruppen dar. In Abbildung~\ref{fig:ose:osm_streetgroups_1} ist ein Kartenausschnitt mit allen Ways mit dem Name \textit{``Berliner Straße''} dargestellt.
-
-Wenn ich jetzt die nächste Abbildung \ref{fig:ose:osm_streetgroups_2} referenziere... was passiert dann? Und die nächste Abbildung \ref{fig:ose:uml} mit dem UML?
-\textbf{HIER WEITERMACHEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!}
-
+Als kompliziertestes Problem stellte sich die Trennung zusammenhängender Way-Gruppen dar.
+In Abbildung~\ref{fig:ose:osm_streetgroups_1} ist ein Kartenausschnitt mit allen Ways mit dem Name \textit{``Berliner Straße''} dargestellt.
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streetgroups_1.png}}
    \caption{Kartenauszug verschiedener Straßengruppen am Beispiel ``Berliner Straße''}
    \label{fig:ose:osm_streetgroups_1}
  \end{figure}
+In diesem sind 5 Way-Gruppen dargestellt.
+Optisch ist das Problem der Trennung einfach zu lösen, jedoch war mir nicht auf Anhieb klar wie ich das programatisch lösen sollte.
+Ich habe die Problemstellung dann weiter abstrahiert und kam auf die Idee die Ways und die dazugehörigen Nodes als Graph zu verstehen. Schematisch ist das in Abbildung~\ref{fig:ose:osm_streetgroups_2} dargestellt.
 
 \begin{figure}[htb]
    \centering
-   \fbox{\includegraphics[width=0.8\textwidth]{gfx/osm_streetgroups_2.jpg}}
+   \fbox{\includegraphics[width=0.8\textwidth]{gfx/osm_streetgroups_2.png}}
    \caption{Schematische Darstellung des Problems der Weggruppenfindung}
    \label{fig:ose:osm_streetgroups_2}
  \end{figure}
 
+Ich ging davon aus, dass dieses Graphen-Problem von einer bestehenden Graphen-Bibliothek gelöst werden kann und fand \textit{JGraphT}\footnote{http://jgrapht.org}.
+Mit JGraphT konnte ich alle Nodes als Knoten und alle Ways als Kanten in einem Graph abbilden.
+Anschließend konnte der Graph auf zusammenhängende Elemente untersucht und getrennt werden.
+Ein Beispiel wird in Listing \ref{jgrapht_separation} gezeigt.
+Schwierig war hierbei allerdings dass nur Mengen von zusammenhängenden Knoten zurückgegeben wurden, die Kanten jedoch verloren gingen.
+Ich musste mir also im Voraus die Verbindungen der einzelnen Knoten speichern und diese anschließend erneut verarbeiten.
+Der vollständige Quellcode der entsprechenden Klasse \texttt{GraphSeparator.java} ist in Anhang~\ref{sec:appenix:ose:graphseparator} angefügt.
+
+\lstset{
+  language=Java,
+  numbers=left,
+  caption=Beispiel der Trennung eines Graphen in verbundene Teile,
+  label=jgrapht_separation,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{javared},
+  commentstyle=\color{javagreen},
+  morecomment=[s][\color{javadocblue}]{/**}{*/},
+}
+\begin{lstlisting}
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
+// ...
+ 
+// Lege neuen leeren Graphen an, Knoten sind Objekte vom Typ Long
+UndirectedGraph<Long, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+// Graph mit 4 Knoten und 2 Kanten befüllen
+Long v1 = new Long(1);
+Long v2 = new Long(2);
+Long v3 = new Long(3);
+Long v4 = new Long(4);
+graph.addVertex(v1);
+graph.addVertex(v2);
+graph.addVertex(v3);
+graph.addVertex(v4);
+graph.addEdge(v1, v2);
+graph.addEge(v3, v4);
+// Erzeuge neuen ConnectivityInspector
+ConnectivityInspector<Long, DefaultEdge> ci = new ConnectivityInspector<>(graph);
+// Erzeuge eine Liste von Sets mit zusammenhängenden Knoten
+// Hier werden jetzt zwei Sets erzeugt. (1,2) und (3,4)
+List<Set<Long>> connectedNodes = ci.connectedSets(); 
+\end{lstlisting}
 
 \subsubsection{Programmstruktur}
 Für viele Problemstellungen innerhalb des zu erstellenden Programms wurden externe Bibliotheken verwendet (Siehe Tabelle \ref{tab:OsmosisStreetExtractor:Libraries}).
@@ -123,10 +170,21 @@ Aufbau eines Graphen                      & org.jgrapht.jgrapht-core           \
    \caption{Klassendiagramm des fertigen Programms}
    \label{fig:ose:uml}
  \end{figure}
-  
+
+Das Programm erhielt den Namen \textbf{\texttt{OsmosisStreetExtractor}}. Die Struktur wird in Abbildung~\ref{fig:ose:uml} gezeigt.
+Die Klasse \texttt{Main} erzeugt hierbei eine Instanz vom Typ \texttt{OsmosisDB} welche die Datenbankverbindung verwaltet.
+Innerhalb von \texttt{OsmosisDB} werden nun alle Straßennamen Deutschlands ermittelt und in einer Liste aus \texttt{StreetGroup} Instanzen gespeichert.
+Anschließend verarbeitet \texttt{Main} alle \texttt{StreetGroup} Objekte und sendet sie zur Trennung in zusammenhängende Segmente an den \texttt{GraphSeparator}.
+Die nun getrennten Ergebnisse pro Straßenname werden in Instanzen vom Typ \texttt{ClusterResult} abgelegt, welche dann in die Ausgabedatei geschrieben werden.
+Die Klasse \texttt{PstQueries} hält alle \textit{PreparedStatements} für die Datenbankabfragen.
+
+Eine Beispielausgabe des Programms findet sich in Anhang~\ref{sec:appendix:ose:output}.
+   
 \subsubsection{Schwierigkeiten}
 Das Testen auf einer kleinen Datenbank beschleunigte zwar die Entwicklung, aber erst der erste Test auf der Hauptdatenbank zeigte massive Performanceprobleme auf.
-Ich hatte wollte meine Anwendung möglichst speicherschonend gestalten und holte \\... meine Straßenobjekte einzeln aus der Datenbank...\\ Eine Messung zeigte jedoch dass die Datenbankabfrage der Flaschenhals \\... mit 300ms Abfragezeit und unter 1ms Verarbeitungszeit\\... also neugeschrieben und alles initial in den RAM zum verarbeiten...
+Ich hatte wollte meine Anwendung möglichst speicherschonend gestalten und fragte die Ways zu den separaten Straßennamen  einzeln aus der Datenbank ab.
+Eine Messung zeigte jedoch dass die Datenbankabfragen auf der großen Produktivdatenbank...der Flaschenhals \\... mit 300ms Abfragezeit und unter 1ms Verarbeitungszeit\\... also neugeschrieben und alles initial in den RAM zum verarbeiten...Graphenproblem hat auch etwas Zeit gekostet...
+
 \subsection{Verknüpfung von Daten der Deutschen Bahn mit Daten aus OpenStreetMap}
 \subsubsection{Aufgabe}
 \subsubsection{Lösung}

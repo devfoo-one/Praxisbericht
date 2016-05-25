@@ -29,6 +29,11 @@ Es verwendet ein ähnliches hierarchisches Klassenmodell. (vgl. \cite{WEB:GEOJSO
 
 \subsubsection{Beispiel für das GeoJSON Format}
 Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord} entspricht der GeoJSON Repräsentation
+\lstset{
+  numbers=none,
+  caption=Beispiel eines geometrischen Punktes in GeoJSON Repräsentation,
+  label=
+}
 \begin{lstlisting}
   {
     "type": "Point",
@@ -52,11 +57,22 @@ Zur Speicherung der Daten werden die Elemente \textit{Nodes}, \textit{Ways} und 
 Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags}, beschrieben. Hier wird beispielsweise festgelegt, ob ein Way eine Straße abbildet oder einen Fluss.
 
 \subsubsection{Beispiel eines Nodes}
+
+\lstset{
+  numbers=none,
+  caption=Beispiel eines Nodes aus planet.osm,
+  label=
+}
 \begin{lstlisting}
 <node id="3637807236" visible="true" version="1" changeset="32456135" timestamp="2015-07-06T19:04:03Z" user="bigbug21" uid="15748" lat="50.5379840" lon="12.1402231"/>
 \end{lstlisting}
 
 \subsubsection{Beispiel eines Ways}
+\lstset{
+  numbers=none,
+  caption=Beispiel eines Ways aus planet.osm,
+  label=
+}
 \begin{lstlisting}
   <way id="358952758" visible="true" version="1" changeset="32456135" timestamp="2015-07-06T19:04:13Z" user="bigbug21"  uid="15748">
   <nd ref="3637807236"/>
@@ -71,6 +87,10 @@ Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags},
 \end{lstlisting}
 
 \subsubsection{Beispiel einer Relation}
+\lstset{
+  numbers=none,
+  caption=Beispiel einer Relation aus planet.osm
+}
 \begin{lstlisting}
 <relation id="2303826" visible="true" version="9" changeset="34783224" timestamp="2015-10-21T17:05:38Z" user="Kakaner" uid="1851521">
   <member type="way" ref="166800600" role=""/>
@@ -203,3 +223,194 @@ Der Tag mit dem Key ``lanes'' hat seinen Wert von \texttt{2} auf \texttt{3} geä
   caption=,
   label=
   }
+  
+\section{GraphSeparator.java}
+\label{sec:appenix:ose:graphseparator}
+\lstset{
+  language=Java,
+  numbers=left,
+  caption=GraphSeparator.java,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{javared},
+  commentstyle=\color{javagreen},
+  morecomment=[s][\color{javadocblue}]{/**}{*/},
+}
+\begin{lstlisting}
+package de.dfki.OsmosisStreetExtractor.util.geo;
+
+import de.dfki.OsmosisStreetExtractor.util.database.OsmosisDB;
+import de.dfki.OsmosisStreetExtractor.util.database.StreetGroup;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+/**
+* Created by Tom Oberhauser
+* This class is used to separate a whole wayset (i.e. streets) into separate parts
+*/
+public class GraphSeparator {
+  
+  private final ArrayList<ArrayList<Long>> clusters_by_name;
+  private final ArrayList<ArrayList<Long>> clusters_by_ref;
+  private final ArrayList<ArrayList<Long>> clusters_by_intref;
+  
+  public GraphSeparator(StreetGroup streetGroup, OsmosisDB db) {
+    /*
+    * graphs for all ways
+    */
+    UndirectedGraph<Long, DefaultEdge> wayGraphStreetName = new SimpleGraph<>(DefaultEdge.class);
+    UndirectedGraph<Long, DefaultEdge> wayGraphStreetRef = new SimpleGraph<>(DefaultEdge.class);
+    UndirectedGraph<Long, DefaultEdge> wayGraphStreetIntRef = new SimpleGraph<>(DefaultEdge.class);
+    
+    /*
+    * K: nodeId, V: WayIds (1 to n)
+    */
+    HashMap<Long, ArrayList<Long>> name_nodeId_2_wayIds = new HashMap<>();
+    HashMap<Long, ArrayList<Long>> ref_nodeId_2_wayIds = new HashMap<>();
+    HashMap<Long, ArrayList<Long>> intref_nodeId_2_wayIds = new HashMap<>();
+    
+    /*
+    * Populate graph for name
+    */
+    if (streetGroup.hasName()) {
+      populateGraph(wayGraphStreetName, name_nodeId_2_wayIds, db, db.getWaysForStreetName(streetGroup.getName()));
+    }
+    db.removeStreetName(streetGroup.getName()); //street name has been parsed, remove out of database.
+    
+    /*
+    * Populate graph for ref
+    */
+    if (streetGroup.hasRef()) {
+      populateGraph(wayGraphStreetRef, ref_nodeId_2_wayIds, db, db.getWaysForStreetRef(streetGroup.getRef()));
+    }
+    db.removeStreetRef(streetGroup.getRef()); //street ref has been parsed, remove out of database.
+    
+    /*
+    * Populate graph for int_ref
+    */
+    if (streetGroup.hasIntRef()) {
+      populateGraph(wayGraphStreetIntRef, intref_nodeId_2_wayIds, db, db.getWaysForStreetIntRef(streetGroup.getIntRef()));
+    }
+    db.removeStreetIntRef(streetGroup.getIntRef()); //street ref has been parsed, remove out of database.
+    
+    /*
+    * Split graph into parts and generate a List with Sets of NodeIds
+    */
+    ConnectivityInspector<Long, DefaultEdge> ci_streetName = new ConnectivityInspector<>(wayGraphStreetName);
+    List<Set<Long>> connectedNodesByName = ci_streetName.connectedSets();  //separate whole graph into isolated parts
+    
+    ConnectivityInspector<Long, DefaultEdge> ci_streetRef = new ConnectivityInspector<>(wayGraphStreetRef);
+    List<Set<Long>> connectedNodesByRef = ci_streetRef.connectedSets();  //separate whole graph into isolated parts
+    
+    ConnectivityInspector<Long, DefaultEdge> ci_streetIntRef = new ConnectivityInspector<>(wayGraphStreetIntRef);
+    List<Set<Long>> connectedNodesByIntRef = ci_streetIntRef.connectedSets();  //separate whole graph into isolated parts
+    
+    clusters_by_name = parseGraphClusters(connectedNodesByName, name_nodeId_2_wayIds);
+    clusters_by_ref = parseGraphClusters(connectedNodesByRef, ref_nodeId_2_wayIds);
+    clusters_by_intref = parseGraphClusters(connectedNodesByIntRef, intref_nodeId_2_wayIds);
+  }
+  
+  /**
+  * Takes a list of sets of connected nodeIds and generates lists of lists of connected wayIds
+  *
+  * @param connectedSets      list of sets of connected nodes
+  * @param node2wayDictionary nodeId -> wayId lookup dictionary
+  * @return A list of lists which contain all wayIds for one connected set / cluster
+  */
+  private ArrayList<ArrayList<Long>> parseGraphClusters(List<Set<Long>> connectedSets, HashMap<Long, ArrayList<Long>> node2wayDictionary) {
+    ArrayList<ArrayList<Long>> retVal = new ArrayList<>();
+    for (Set<Long> aggregate : connectedSets) {
+      ArrayList<Long> currentAggregateWays = new ArrayList<>();
+      for (Long nodeId : aggregate) {
+        for (Long wayId : node2wayDictionary.get(nodeId)) {
+          currentAggregateWays.add(wayId);
+        }
+      }
+      retVal.add(currentAggregateWays);
+    }
+    return retVal;
+  }
+  
+  /**
+  * Takes a list of wayIds and populates the graph and the lookup HashMaps
+  *
+  * @param graph          Graph to populate
+  * @param nodeDictionary lookup HashMap to populate (nodeIds -> wayIds)
+  * @param db             OsmosisDB object for querying the nodes of ways
+  * @param ways           list of way ids
+  */
+  private void populateGraph(UndirectedGraph<Long, DefaultEdge> graph, HashMap<Long, ArrayList<Long>> nodeDictionary, OsmosisDB db, ArrayList<Long> ways) {
+    if (ways != null) { //maybe name got parsed already
+      for (Long wayId : ways) {
+        ArrayList<Long> nodesArray = db.getNodeIds(wayId); //Get array of nodes for current way
+        graph.addVertex(nodesArray.get(0)); //add first vertex
+        nodeDictionary.putIfAbsent(nodesArray.get(0), new ArrayList<>()); //generate way dictionary for node if there is none
+        nodeDictionary.get(nodesArray.get(0)).add(wayId); //add wayId for node
+        for (int i = 1; i < nodesArray.size(); i++) {
+          Long currentNode = nodesArray.get(i);
+          Long lastNode = nodesArray.get(i - 1);
+          graph.addVertex(currentNode);
+          if (!currentNode.equals(lastNode)) { //loop detection
+            graph.addEdge(lastNode, currentNode);
+          }
+          nodeDictionary.putIfAbsent(currentNode, new ArrayList<>()); //generate way dictionary for node if there is none
+          nodeDictionary.get(currentNode).add(wayId); //add wayId for node
+        }
+      }
+    }
+  }
+  
+  /**
+  * Returns all clusters by name
+  *
+  * @return list of lists of way ids
+  */
+  public ArrayList<ArrayList<Long>> getClustersByName() {
+    return clusters_by_name;
+  }
+  
+  /**
+  * Returns all clusters by ref
+  *
+  * @return list of lists of way ids
+  */
+  public ArrayList<ArrayList<Long>> getClustersByRef() {
+    return clusters_by_ref;
+  }
+  
+  /**
+  * Returns all clusters by int_ref
+  *
+  * @return list of lists of way ids
+  */
+  public ArrayList<ArrayList<Long>> getClustersByIntref() {
+    return clusters_by_intref;
+  }
+}
+\end{lstlisting}
+
+\section{Beispielausgabe der Straßenliste des OsmosisStreetExtractor}
+\label{sec:appendix:ose:output}
+Es folgt eine Beispielausgabe des \texttt{OsmosisStreetExtractor}.
+Der Inhalt des Feldes \texttt{linestring} wurde aus Gründen der Lesbarkeit gekürzt.
+
+\lstset{
+  language=,
+  numbers=left,
+  caption=Beispielausgabe des OsmosisStreetExtractor,
+  keywordstyle=,
+  stringstyle=,
+  commentstyle=,
+  morecomment=,
+}
+
+\begin{lstlisting}
+"id";"name";"linestring";"geojson"
+"0";"An der Rudower Höhe";"0105000020E610000001000...4A40";"{"coordinates":[[[13.5190141,52.4209986],[13.5188694,52.4211964],[13.518082,52.4219104]]],"type":"MultiLineString"}"
+\end{lstlisting}
