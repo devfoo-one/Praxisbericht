@@ -159,10 +159,83 @@ Meine Hauptaufgabe bestand darin, eine Abbildung von Bahnhöfen aus den GTFS-Dat
 Mit Hilfe dieser Abbildung ist es möglich, zu Bahnhöfen oder Zugstrecken erweiterte Informationen aus OpenStreetMap zu beziehen, wie zum Beispiel das Bundesland oder Straßen in der Nähe des Bahnhofes.
 
 Als Nebenaufgabe sollte geprüft werden, in wiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
+
 \subsubsection{Lösung}
 Da GTFS-Daten nur aus Textdateien bestehen, sollten diese zur effizienten Verarbeitung in einer Datenbank vorhanden sein.
 Das DFKI hatte die DB-GTFS Daten bereits in einer Datenbank vorliegen, jedoch wollte ich eine lokale Kopie in meiner eigenen Entwicklungsumgebung.
 Zum Import wurde der frei verfügbarer Importer \textit{OpenTransitTools/gtfsdb}\footnote{https://github.com/OpenTransitTools/gtfsdb} verwendet.
+
+Nun verschaffte ich mir einen Überblick über die vorhandenen Daten und klärte die Frage wie ich die Objekte beider Datenbanken miteinander in Verbindung bringen konnte.
+Ein Bahnhof aus den DB-GTFS Daten wird durch Name und geographischen Koordinaten spezifiziert.
+
+Einen Bahnhof innerhalb von OpenStreetMap auszumachen war ein wenig komplizierter.
+Eine Recherche im OpenStreetMap Wiki\footnote{http://wiki.openstreetmap.org/wiki/Railways} und viele Versuche ergaben dass ein Bahnhof in OpenStreetMap durch einen Node repräsentiert wird, der eine bestimmte Tag-Kombination aufweist.
+Genauer gesagt ein Node, der 
+\begin{compactitem}
+  \item entweder Im Tag \texttt{railway} einen der Werte \texttt{''station''}, \texttt{''halt''} oder \texttt{''stop''}
+  \item oder im Tag \texttt{public\_transport} den Wert \texttt{''stop\_position''} und im Tag \texttt{train} den Wert \texttt{''yes''}
+\end{compactitem}
+aufweist. 
+
+Ich hatte nun also zwei Objektmengen.
+Auf der einen Seite die Menge aller DB-GTFS Bahnhöfe und auf der anderen Seite die Menge aller OpenStreetMap Bahnhöfe.
+Nun musste Ich einen Weg finden um zu beschreiben welche DB-GTFS Bahnhöfe zu welchem OpenStreetMap Bahnhöfen gehören.
+
+Im Gespräch mit meinem Betreuer stellte sich heraus, dass es sich hierbei um ein klassisches \textit{Klassifikationsproblem} handelt.
+Es muss für jede Objektkombination die Frage beantwortet werden, ob diese zusammengehören oder nicht.
+Um dies festzustellen hatte ich zwei Attribute, zum einen die geographische Position und zum anderen den Name.
+
+Sich alleine auf die Position zu beziehen war nicht möglich, da diese, wie in Abbildung \ref{fig:gtfs2osm:geoDiff} gezeigt, in beiden Datenquellen leicht voneinander abwichen.
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_geoDiff.png}}
+   \caption{Abweichung der geographischen Position in beiden Datenbanken am Beispiel S-Bahnhof Greifswalder Straße Berlin}
+   \label{fig:gtfs2osm:geoDiff}
+ \end{figure}
+Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnhöfe teilweise sehr nah beieinander, teilweise jedoch auch sehr fern voneinander weg liegen. und hier kein exakter Grenzwert gefunden werden kann. In Abbildung \ref{fig:gtfs2osm:nearNameDiff} sind die beiden zusammengehörigen Bahnhofsobjekte ``Berlin-Wuhlheide'' sowie ``S-Wuhlheide'' nur knapp näher beieinander als das fremde Bahnhofsobjekt ``Wuhlheide-Parkeisenbahn''. Hier müsste man die Grenze bei ca. 100m ziehen. In Abbildung \ref{fig:gtfs2osm:farLikelihood} benötigt man jedoch ca. 120m um die Zugehörigkeit zu erzeugen. Daraus folgt, dass die Entfernung allein ebenfalls kein Kriterium sein kann.
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_nearNameDiff.png}}
+   \caption{Entfernungen zwischen zusammengehörigen und nicht zusammengehörigen Bahnhofsobjekten}
+   \label{fig:gtfs2osm:nearNameDiff}
+ \end{figure}
+ \begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_farLikelihood.png}}
+   \caption{Entfernungen zwischen zusammengehörigen Bahnhofsobjekten 120m}
+   \label{fig:gtfs2osm:farLikelihood}
+ \end{figure}
+Der Name konnte ebenfalls nicht alleinstehend als Schlüssel verwendet werden. Zum Beispiel existiert in den DB-GTFS Daten ein Objekt names ``Berlin Hbf'' und in den OpenStreetMap Daten ein Objekt names ``S Hauptbahnhof''. Diese Objekte gehören zusammen, ihre Bezeichnungen sind jedoch stark unterschiedlich.
+
+Namensgleichheit Levenshtein ... Grafik mit Gegenüberstellung distanz levdist
+Gold-Standard Berlin...Grafik Zusammenhang Levenshtein und Entfernung...
+Versuch NaiveBayes Klassifikator in R... Kennzahlen F-Measure...
+Zweites Problem: Mehrere OSM sowie GTFS Punkte für den gleichen Bahnhof
+
+\subsubsection{Programmstruktur}
+
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_full.png}}
+   \caption{Klassendiagramm GTFS2OSMRailwayLinker}
+   \label{fig:gtfs2osm:uml_full}
+ \end{figure}
+
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_main.png}}
+   \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf Main}
+   \label{fig:gtfs2osm:uml_full}
+ \end{figure}
+
+
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_stationcluster.png}}
+   \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf StationCluster}
+   \label{fig:gtfs2osm:uml_full}
+ \end{figure}
+
 
 \subsubsection{Schwierigkeiten}
 \subsection{Datenaufwertung??}
