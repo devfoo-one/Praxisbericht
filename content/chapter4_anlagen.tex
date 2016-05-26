@@ -223,6 +223,46 @@ Der Tag mit dem Key ``lanes'' hat seinen Wert von \texttt{2} auf \texttt{3} geä
   caption=,
   label=
   }
+
+\section{Beispiel zur Verwendung von JGraphT zur Trennung eines Graphen in zusammenhängende Elemente}
+\label{sec:appendix:jgrapht_separation}
+\lstset{
+  language=Java,
+  numbers=left,
+  caption=Beispiel der Trennung eines Graphen in verbundene Teile,
+  label=jgrapht_separation,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{javared},
+  commentstyle=\color{javagreen},
+  morecomment=[s][\color{javadocblue}]{/**}{*/},
+}
+\begin{lstlisting}
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.ConnectivityInspector;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
+// ...
+ 
+// Lege neuen leeren Graphen an, Knoten sind Objekte vom Typ Long
+UndirectedGraph<Long, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+// Graph mit 4 Knoten und 2 Kanten befüllen
+Long v1 = new Long(1);
+Long v2 = new Long(2);
+Long v3 = new Long(3);
+Long v4 = new Long(4);
+graph.addVertex(v1);
+graph.addVertex(v2);
+graph.addVertex(v3);
+graph.addVertex(v4);
+graph.addEdge(v1, v2);
+graph.addEge(v3, v4);
+// Erzeuge neuen ConnectivityInspector
+ConnectivityInspector<Long, DefaultEdge> ci = new ConnectivityInspector<>(graph);
+// Erzeuge eine Liste von Sets mit zusammenhängenden Knoten
+// Hier werden jetzt zwei Sets erzeugt. (1,2) und (3,4)
+List<Set<Long>> connectedNodes = ci.connectedSets(); 
+\end{lstlisting}
   
 \section{GraphSeparator.java}
 \label{sec:appenix:ose:graphseparator}
@@ -414,3 +454,33 @@ Der Inhalt des Feldes \texttt{linestring} wurde aus Gründen der Lesbarkeit gek�
 "id";"name";"linestring";"geojson"
 "0";"An der Rudower Höhe";"0105000020E610000001000...4A40";"{"coordinates":[[[13.5190141,52.4209986],[13.5188694,52.4211964],[13.518082,52.4219104]]],"type":"MultiLineString"}"
 \end{lstlisting}
+
+\section{General Transit Feed Specification (GTFS)}
+\label{sec:appendix:gtfs_spec}
+Hier findet sich, auszugsweise, eine kurze Übersicht des \textit{General Transit Feed Specification (GTFS)} Formates.
+GTFS Daten bestehen aus mehreren gepackten Textdateien.
+Eine Übersicht über die benötigten Dateien innerhalb eines GTFS Pakets und deren Inhalt ist in Tabelle \ref{tab:gtfs_files} und Abbildung \ref{fig:gtfs_uml} dargestellt. (vgl. \cite{WEB:Google:gtfs:2016})
+
+
+\begin{table}[h]
+\centering
+\caption{Benötigte Dateien innerhalb eines GTFS-Pakets}
+\label{tab:gtfs_files}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Datei}  & \textbf{Inhalt}                         \\ \hline
+agency.txt      & Verkehrsunternehmen                     \\ \hline
+stops.txt       & Bahnhöfe, Haltestellen                  \\ \hline
+routes.txt      & Linien, z.B. eine S-Bahn Strecke        \\ \hline
+trips.txt       & eine konkrete Fahrt auf einer Linie     \\ \hline
+stop\_times.txt & Abfahrtszeiten pro Fahrt und Bahnhof    \\ \hline
+calendar.txt    & Tage, an denen ein Dienst verfügbar ist \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htb]
+  \centering
+   \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs_uml.png}}
+   \caption{Felder innerhalb von GTFS Daten}
+   \label{fig:gtfs_uml}
+\end{figure}
