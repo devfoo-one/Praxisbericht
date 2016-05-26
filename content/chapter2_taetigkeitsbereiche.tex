@@ -183,7 +183,12 @@ Eine Beispielausgabe des Programms findet sich in Anhang~\ref{sec:appendix:ose:o
 \subsubsection{Schwierigkeiten}
 Das Testen auf einer kleinen Datenbank beschleunigte zwar die Entwicklung, aber erst der erste Test auf der Hauptdatenbank zeigte massive Performanceprobleme auf.
 Ich hatte wollte meine Anwendung möglichst speicherschonend gestalten und fragte die Ways zu den separaten Straßennamen  einzeln aus der Datenbank ab.
-Eine Messung zeigte jedoch dass die Datenbankabfragen auf der großen Produktivdatenbank...der Flaschenhals \\... mit 300ms Abfragezeit und unter 1ms Verarbeitungszeit\\... also neugeschrieben und alles initial in den RAM zum verarbeiten...Graphenproblem hat auch etwas Zeit gekostet...
+Dies funktionierte auf meiner lokalen und wesentlich kleineren Testdatenbank sehr gut, jedoch auf Datenbank mit den gesamten Daten Deutschlands annähernd gar nicht.
+Eine Messung zeigte dass die Abfragen auf der Deutschland-Datenbank mit 300ms Abfragezeit der Flaschenhals waren.
+Ich schrieb letztendlich die Datenbankanbindungsklasse \texttt{OsmosisDB} fast komplett um.
+Statt vieler kleiner Abfragen, welche wenig Daten zurücklieferten, wurden nun wenige Abfragen an die Datenbank gestellt, die jedoch viele Daten lieferten.
+Die Verarbeitung erfolgte dann komplett im Arbeitsspeicher und war performant genug.\\\\
+Ebenfalls dauerte es eine Weile bis ich die Trennung der einzelnen Straßengruppen als Graphenproblem verstand.
 
 \subsection{Verknüpfung von Daten der Deutschen Bahn mit Daten aus OpenStreetMap}
 \subsubsection{Aufgabe}
