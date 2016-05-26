@@ -207,7 +207,10 @@ Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnh
  \end{figure}
 Der Name konnte ebenfalls nicht alleinstehend als Schlüssel verwendet werden. Zum Beispiel existiert in den DB-GTFS Daten ein Objekt names ``Berlin Hbf'' und in den OpenStreetMap Daten ein Objekt names ``S Hauptbahnhof''. Diese Objekte gehören zusammen, ihre Bezeichnungen sind jedoch stark unterschiedlich.
 
-Namensgleichheit Levenshtein ... Grafik mit Gegenüberstellung distanz levdist
+Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Attribute (Name sowie geographische Entfernung) vornehmen konnte. Vergleich der String Ähnlichkeit entschied ich mich für eine normalisierte Variante der \textit{Levenshtein-Distanz}, welche einen Wert im Interval $[0,1]$ ermittelt, wobei $0$ bedeutet beide Strings sind gleich und $1$ dass beide Strings vollständig unterschiedlich sind. Details zur genauen Methode finden sich in Anhang \ref{sec:appendix:levenshtein}.
+
+
+Grafik mit Gegenüberstellung distanz levdist
 Gold-Standard Berlin...Grafik Zusammenhang Levenshtein und Entfernung...
 Versuch NaiveBayes Klassifikator in R... Kennzahlen F-Measure...
 Zweites Problem: Mehrere OSM sowie GTFS Punkte für den gleichen Bahnhof

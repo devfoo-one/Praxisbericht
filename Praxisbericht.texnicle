@@ -65,7 +65,7 @@
         <attribute name="name" type="string">Praxisbericht</attribute>
         <attribute name="folder" type="string">/Users/tom/Dropbox/SYNC/SYNC IPAD/Studium/6. Semester/Praktikum/Bericht</attribute>
         <relationship name="mainfile" type="1/1" destination="FILE" idrefs="z109"></relationship>
-        <relationship name="selected" type="1/1" destination="FILE" idrefs="z114"></relationship>
+        <relationship name="selected" type="1/1" destination="FILE" idrefs="z117"></relationship>
         <relationship name="settings" type="1/1" destination="SETTINGS" idrefs="z103"></relationship>
         <relationship name="uisettings" type="1/1" destination="UISETTINGS" idrefs="z104"></relationship>
         <relationship name="items" type="0/0" destination="PROJECTITEM" idrefs="z109 z117 z116 z111 z115 z112 z108 z113 z114 z110 z105"></relationship>
@@ -88,9 +88,9 @@
         <attribute name="showlogwarningitems" type="bool">0</attribute>
         <attribute name="showloginfoitems" type="bool">0</attribute>
         <attribute name="showlogerroritems" type="bool">1</attribute>
-        <attribute name="pdfviewscrollrect" type="string">{{0, 15312.806535956166}, {604, 864.54901960029747}}</attribute>
+        <attribute name="pdfviewscrollrect" type="string">{{0, 3461.0993464073363}, {604, 864.54901959102426}}</attribute>
         <attribute name="showpdfthumbnails" type="bool">0</attribute>
-        <attribute name="selectedcontrolstab" type="int16">0</attribute>
+        <attribute name="selectedcontrolstab" type="int16">1</attribute>
         <attribute name="maxoutlinedepth" type="int16">7</attribute>
         <attribute name="logoutputlevel" type="int16">0</attribute>
         <attribute name="editorwidth" type="float">914</attribute>
@@ -204,12 +204,12 @@
     </object>
     <object type="TEXFILE" id="z114">
         <attribute name="wasopen" type="bool">5</attribute>
-        <attribute name="visiblerect" type="string">{{0, 3470}, {886, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">485987724.80872601270675659180</attribute>
+        <attribute name="visiblerect" type="string">{{0, 3844}, {886, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">485988812.71717101335525512695</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485987932.88518100976943969727</attribute>
+        <attribute name="fileloaddate" type="date">485988823.66368097066879272461</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{17237, 0}</attribute>
+        <attribute name="cursor" type="string">{17659, 0}</attribute>
         <attribute name="sortindex" type="int32">4</attribute>
         <attribute name="name" type="string">chapter2_taetigkeitsbereiche.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -258,12 +258,12 @@
     </object>
     <object type="TEXFILE" id="z117">
         <attribute name="wasopen" type="bool">3</attribute>
-        <attribute name="visiblerect" type="string">{{0, 6300}, {886, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">485960740.97239398956298828125</attribute>
+        <attribute name="visiblerect" type="string">{{0, 7381}, {886, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">485991932.18769699335098266602</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">485960742.27204298973083496094</attribute>
+        <attribute name="fileloaddate" type="date">485992030.71374899148941040039</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{20496, 0}</attribute>
+        <attribute name="cursor" type="string">{22760, 0}</attribute>
         <attribute name="sortindex" type="int32">2</attribute>
         <attribute name="name" type="string">chapter4_anlagen.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>

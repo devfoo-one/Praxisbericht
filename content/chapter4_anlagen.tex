@@ -269,6 +269,7 @@ List<Set<Long>> connectedNodes = ci.connectedSets();
 \lstset{
   language=Java,
   numbers=left,
+  label=,
   caption=GraphSeparator.java,
   keywordstyle=\color{javapurple}\bfseries,
   stringstyle=\color{javared},
@@ -444,12 +445,12 @@ Der Inhalt des Feldes \texttt{linestring} wurde aus Gründen der Lesbarkeit gek�
   language=,
   numbers=left,
   caption=Beispielausgabe des OsmosisStreetExtractor,
+  label=,
   keywordstyle=,
   stringstyle=,
   commentstyle=,
   morecomment=,
 }
-
 \begin{lstlisting}
 "id";"name";"linestring";"geojson"
 "0";"An der Rudower Höhe";"0105000020E610000001000...4A40";"{"coordinates":[[[13.5190141,52.4209986],[13.5188694,52.4211964],[13.518082,52.4219104]]],"type":"MultiLineString"}"
@@ -478,9 +479,129 @@ calendar.txt    & Tage, an denen ein Dienst verfügbar ist \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{figure}[htb]
+\begin{figure}[!hp]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs_uml.png}}
    \caption{Felder innerhalb von GTFS Daten}
    \label{fig:gtfs_uml}
 \end{figure}
+
+\section{Levenshtein Distanz zur Ermittlung der Ähnlichkeit zweier Bahnhofsnamen}
+\label{sec:appendix:levenshtein}
+Die \textit{Levenshtein Distanz} zwischen zwei Zeichenketten gibt die Anzahl der Editieroperationen zurück, die notwendig sind um die eine Zeichenkette in die andere zu transformieren.
+Der Größe des ermittelten Wertes kann, je nach Länge der Zeichenketten variieren. 
+Die verwendete Bibliothek \textit{java-string-similarity}\footnote{https://github.com/tdebatty/java-string-similarity} bietet die Möglichkeit, eine normalisierte Levenshtein-Distanz zu ermitteln. Dazu wird die ermittelte Levenshtein-Distanz anschließend durch die Länge der längsten Zeichenkette dividiert.
+Diese Operation ergibt ein Interval $[0,1]$.
+
+Nun musste ein Algorithmus entwickelt werden, der die normalisierte Levenshtein-Distanz ein bisschen besser auf das Themengebiet Bahnhofsbezeichnungen vorbereitet. Ein Beispiel hierfür sind die Zeichenketten \texttt{''Hauptbahnhof Berlin''} und \texttt{''Berlin Hauptbahnhof''}. Offensichtlich bezeichnen diese den selben Bahnhof, jedoch entspricht die Levenshtein-Distanz zwischen den Zeichenketten $14$ und die normalisierte Levenshtein-Distanz $14/19\approx0,737$.
+ 
+Ich entschied mich dazu, die Zeichenketten vor dem Vergleich zu \textit{tokenizen}, das bedeutet die Zeichenkette anhand bestimmter Trennungszeichen in eine Liste aus Teilzeichenketten aufzuteilen. Dazu wurde die Klasse \texttt{java.util.StringTokenizer} verwendet (Siehe Listing \ref{lev_sum} Zeile 74-81). Anschließend werden die Tokens der beiden zu vergleichenden Zeichenketten alle miteinander verglichen und die jeweils niedrigsten Levenshtein-Distanzen, gewichtet anhand der Länge des kürzeren Tokens aufsummiert (Siehe Listing \ref{lev_sum}). Dies sorgt zum Beispiel dafür, dass die zu Beginn erwähnten Zeichenketten \texttt{''Hauptbahnhof Berlin''} und \texttt{''Berlin Hauptbahnhof''} eine Distanz von $0$ aufweisen.
+
+\lstset{
+  language=Java,
+  numbers=left,
+  caption=Klasse StringDistance zur Ermittlung der Gleichheit zweier Bahnhofsnamen,
+  label=lev_sum,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{javared},
+  commentstyle=\color{javagreen},
+  morecomment=[s][\color{javadocblue}]{/**}{*/},
+}
+\begin{lstlisting}
+package utils;
+
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
+import info.debatty.java.stringsimilarity.interfaces.NormalizedStringDistance;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+/**
+ * Created by Tom Oberhauser
+ * Methods for String comparison
+ */
+public class StringDistance {
+  /**
+   * Compares two Strings. It returns a weighted sum of the best matching tokens.
+   * (eg. "Berlin Hauptbahnhof" and "(Hauptbahnhof) Berlin" would have a distance of 0)
+   *
+   * @param s1 left String
+   * @param s2 right String
+   * @return likelihood [0;1] where 0 is equal and 1 is different
+   */
+  public static double minDistance(final String s1, final String s2) {
+    double retVal = 0;
+    int n = 0;
+    List<String> words_left = tokenize(s1);
+    List<String> words_right = tokenize(s2);
+    Table<String, String, Double> matcherTable = HashBasedTable.create();
+    /*
+    compare every left with every right word and fill matcher tables
+     */
+    for (String wordLeft : words_left) {
+      for (String wordRight : words_right) {
+        double lev = levenshtein(wordLeft, wordRight);
+        matcherTable.put(wordLeft, wordRight, lev);
+      }
+    }
+    /*
+    find smallest values and remove corresponding rows and cols until the table is empty
+     */
+    while (!matcherTable.isEmpty()) {
+      String minRow = null;
+      String minCol = null;
+      Double minVal = Double.MAX_VALUE;
+      for (String row : matcherTable.rowKeySet()) {
+        for (String col : matcherTable.columnKeySet()) {
+          Double currentCell = matcherTable.get(row, col);
+          if (currentCell < minVal) {
+            minRow = row;
+            minCol = col;
+            minVal = currentCell;
+          }
+        }
+      }
+      if (minRow != null && minCol != null) {
+        int minLength = (minRow.length() <= minCol.length()) ? minRow.length() : minCol.length();
+        n += minLength;
+        retVal += (minVal * (double) minLength);
+        matcherTable.row(minRow).clear();
+        matcherTable.column(minCol).clear();
+      }
+    }
+    return retVal / n;
+  }
+
+  /**
+   * Tokenizes a String
+   *
+   * @param s String
+   * @return List of tokens without delimiters
+   */
+  private static List<String> tokenize(final String s) {
+    List<String> list = new ArrayList<>();
+    StringTokenizer tokenizer = new StringTokenizer(s, "()[].-,; ", false);
+    while (tokenizer.hasMoreTokens()) {
+      list.add(tokenizer.nextToken());
+    }
+    return list;
+  }
+
+  /**
+   * Calculates the normalized levenshtein distance of two Strings
+   *
+   * @param s1 left String
+   * @param s2 right String
+   * @return likelihood [0;1] where 0 is equal and 1 is different
+   */
+  private static double levenshtein(final String s1, final String s2) {
+    NormalizedStringDistance nlv = new NormalizedLevenshtein();
+    return nlv.distance(s1, s2);
+  }
+}
+\end{lstlisting}
+
+   
