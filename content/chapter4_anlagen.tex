@@ -648,3 +648,18 @@ Alle als \texttt{+} vorhergesagten Werte währen dann in diesem Fall korrekt.
 Aus diesem Grund gibt es das \textit{F-Maß}, welche beide Werte miteinander vereint und als Qualitätskriterium verwendet werden kann.
 
 $$F = 2 * \frac{Precision * Recall}{Precision + Recall}$$
+
+\section{Beispielausgabe des GTFS2OSMRailwayLinker}
+\label{sec:appendix:gtfs2osm_example}
+Der Inhalt des Feldes \texttt{boundingBox} wurde aus Gründen der Lesbarkeit gekürzt.
+\lstset{
+  language=,
+  numbers=left,
+  caption=Ausgabe des GTFS2OSMRailwayLinker,
+  label=,
+}
+\begin{lstlisting}
+id,name,center,boundingBox,osm_node_ids,gtfs_stop_ids
+1456,"Berlin Greifswalder Str",0000000001402AE0E29F9CE8DC404A45231B229B35,000000000300...06C0E47,{3659830181,3876863066,1127967028},{8089011}
+\end{lstlisting}
+
