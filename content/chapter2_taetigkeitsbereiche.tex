@@ -235,13 +235,50 @@ Ich erstellte ein Hilfsprogramm, welches verschiedene Kombinationen aus Schwellw
 
 Die beste Vorhersage, ob zwei Bahnhöfe zusammengehörten, erzielte ich, wenn die Levenshtein-Distanz $\leq0,825$ und die geographische Distanz $\leq0,0045$ war. Diese Kombination erzielte auf dem Trainingsdatensatz das beste F-Maß mit einem Wert von $0,9842$.
 
-Zweites Problem: Mehrere OSM sowie GTFS Punkte für den gleichen Bahnhof
+Nun hatte ich eine Lösung, mit der ich die zu einem DB-GTFS Bahnhofsobjekt zugehörigen OpenStreetMap Bahnhofsobjekte finden konnte. Jedoch gab es innerhalb der DB-GTFS Daten auch teilweise mehrere Bahnhofsobjekte pro Bahnhof.
+Dies löste ich, in dem ich einen Bahnhof als Sammlung aus verschiedenen DB-GTFS-, sowie OpenStreetMap Objekten verstand.
+Diese Sammlung repräsentierte ich als \texttt{StationCluster}-Objekte (siehe Abbildung \ref{fig:gtfs2osm:stationcluster}).
 
-Erzeugt StationCluster mit Mittelpunktangabe sowie errechnetem Name
+\begin{figure}[htb]
+   \centering
+   \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_stationcluster.png}}
+   \caption{Die Klasse StationCluster}
+   \label{fig:gtfs2osm:stationcluster}
+ \end{figure}
+
+Um diese zu befüllen, iterierte ich über alle DB-GTFS Objekte und ermittelte pro Objekt alle zugehörigen OpenStreetMap Objekte.
+Anschließend prüfte ich, ob bereits ein \texttt{StationCluster} existiert, der eins dieser OpenStreetMap Objekte enthält.
+Wenn ja, dann wurden die DB-GTFS-, sowie die OpenStreetMap Objekte diesem \texttt{StationCluster} hinzugefügt.
+Wenn nein, dann wurde ein neuer \texttt{StationCluster} angelegt.
+Die so erzeugten \texttt{StationCluster} Objekte waren nun das Kernstück meines Ergebnisses.
+
 
 \subsubsection{Programmstruktur}
 
-Verwendete Libraries und grober Ablauf...
+Es wurden erneut externe Bibliotheken (siehe Tabelle \ref{tab:GTFS2OSM:Libraries}). verwendet. 
+\begin{table}[htb]
+\small
+\centering
+\caption{verwendete externe Bibliotheken}
+\label{tab:GTFS2OSM:Libraries}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Problem}                          & \textbf{verwendete Bibliothek}     \\ \hline
+Datenbankanbindung PostgreSQL             & PostgreSQL JDBC Driver JDBC 4.1    \\ \hline
+Verarbeitung von Kommandozeilenargumenten & Apache Commons CLI                 \\ \hline
+Ermittlung von String-Distanzen           & info.debatty.java-string-similarity         \\ \hline
+Ermittlung von Geo-Distanzen           & Vivid Solutions Inc. JTS Topology Suite         \\ \hline
+erweiterte Datenstrukturen, z.B. Tabellen & Google Guava          \\ \hline
+\end{tabular}
+\end{table}
+
+Das Programm erhielt den Namen \texttt{GTFS2OSMRailwayLinker}. 
+Die Struktur des kompletten Programms ist in Abbildung \ref{fig:gtfs2osm:uml_full} ersichtlich.
+Die Klasse \texttt{Main} erzeugt einen \texttt{CSVExporter}, welcher für den Export ins CSV-Format verantwortlich ist.
+Anschließend werden die Datenbankschnittstellen \texttt{GTFSDB} und \texttt{OsmosisDB}, sowie der, für die Gruppenbildung zuständige, \texttt{Clusterizer} angelegt.
+Dies ist in Abbildung \ref{fig:gtfs2osm:uml_main} zu erkennen.
+Der \texttt{Clusterizer} iteriert nun über die DB-GTFS Objekte und legt \texttt{StationCluster} an (siehe Abbildung \ref{fig:gtfs2osm:uml_stationcluster}).
+Diese werden letztendlich über den \texttt{CSVExporter} exportiert.
 
 \begin{figure}[htb]
    \centering
@@ -254,7 +291,7 @@ Verwendete Libraries und grober Ablauf...
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_main.png}}
    \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf Main}
-   \label{fig:gtfs2osm:uml_full}
+   \label{fig:gtfs2osm:uml_main}
  \end{figure}
 
 
@@ -262,9 +299,11 @@ Verwendete Libraries und grober Ablauf...
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_stationcluster.png}}
    \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf StationCluster}
-   \label{fig:gtfs2osm:uml_full}
+   \label{fig:gtfs2osm:uml_stationcluster}
  \end{figure}
 
-
 \subsubsection{Schwierigkeiten}
+
+...Das eingehend erwähnte Erzeugen eines Streckenverlaufes wurde nach langer Recherche nicht durchgeführt, da ...
+
 \subsection{Datenaufwertung??}
