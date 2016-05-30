@@ -604,4 +604,47 @@ public class StringDistance {
 }
 \end{lstlisting}
 
-   
+\section{Kennzahlen zur qualitativen Bewertung eines binären Klassifikators}
+\label{sec:appenix:fmeasure}
+
+Ein Klassifikator soll etwas bestimmtes aus gegebenen Merkmalen vorhersagen.
+Genauergesagt entspricht ein Klassifikator einer Abbildung eines Merkmalsraumes auf eine Menge von Klassen.
+Um Die Qualität dieser Vorhersage bzw. Abbildung zu bewerten, existieren Kennzahlen.
+Im folgenden wird auf die Kennzahlen \textit{Precision (Genauigkeit)}, \textit{Recall (Trefferquote)} und \textit{F-Maß} zur qualitativen Bewertung eines binären Klassifikators eingegangen.
+
+Zunächst muss ein Datensatz mit bekannten Ergebnissen vorliegen.
+Dieser wird auch Gold-Standard genannt.
+Anhand des Gold-Standards können nun Vorhersagen mit bekannten Ergebnissen durchgeführt, und eine \textit{Wahrheitsmatrix} befüllt werden. In Tabelle \ref{tab:wahrheitsmatrix} ist eine Wahrheitsmatrix für die Beispielklassen \texttt{+} und \texttt{-} abgebildet. 
+\begin{table}[]
+\centering
+\caption{Wahrheitsmatrix}
+\label{tab:wahrheitsmatrix}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{}           & \textbf{Vorhersage +} & \textbf{Vorhersage -} \\ \hline
+\textbf{Wahrheit +} & True Positive ($TP$)    & False Negative ($FN$)   \\ \hline
+\textbf{Wahrheit -} & False Positive ($FP$)   & True Negative ($TN$)    \\ \hline
+\end{tabular}
+\end{table}
+
+Anhand der Messwerte $TP, FP, FN, TN$ lassen sich nun Kennzahlen errechnen.
+
+\subsubsection{Precision (Genauigkeit)}
+
+Der \textit{Precision-Wert} gibt das Verhältnis zwischen allen positiven Vorhersagen und den korrekten positiven Vorhersagen an. Vereinfacht gesagt, wie viele von den positiv vorhergesagten Ergebnissen waren korrekt.
+
+$$Precision = \frac{TP}{TP + FP}$$
+
+\subsubsection{Recall (Trefferquote)}
+
+Der \textit{Recall-Wert} gibt das Verhältnis zwischen allen korrekt als positiv vorhergesagten Objekte an der Gesamtheit der tatsächlich positiven Objekte an. Vereinfacht gesagt, wie viele positive Ergebnisse wurden wirklich gefunden.
+$$Recall = \frac{TP}{TP + FN}$$
+
+\subsubsection{F-Maß}
+
+Die Kennzahlen \textit{Precision} und \textit{Recall} alleine ergeben noch keine gute Abbildung der Vorhersagequalität.
+Beispielsweise lässt sich der Precision-Wert anheben, in dem der Klassifikator nur ein einzelnes Ergebnis als \texttt{+} korrekt klassifiziert.
+Alle als \texttt{+} vorhergesagten Werte währen dann in diesem Fall korrekt.
+Aus diesem Grund gibt es das \textit{F-Maß}, welche beide Werte miteinander vereint und als Qualitätskriterium verwendet werden kann.
+
+$$F = 2 * \frac{Precision * Recall}{Precision + Recall}$$

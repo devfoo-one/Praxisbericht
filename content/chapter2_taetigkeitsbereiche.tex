@@ -209,10 +209,32 @@ Der Name konnte ebenfalls nicht alleinstehend als Schlüssel verwendet werden. Z
 
 Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Attribute (Name sowie geographische Entfernung) vornehmen konnte. Zum Vergleich der String Ähnlichkeit entschied ich mich für eine normalisierte Variante der \textit{Levenshtein-Distanz}, welche einen Wert im Interval $[0,1]$ ermittelt, wobei $0$ bedeutet beide Strings sind gleich und $1$ dass beide Strings vollständig unterschiedlich sind. Details zur genauen Methode finden sich in Anhang \ref{sec:appendix:levenshtein}.
 
+Da es sich um ein Klassifikationsproblem handelte, unternahm ich Versuche das Problem mit einem \textit{Naive Bayse-Klassifikator} zu lösen.
+Diesen implementierte ich zusammen mit meinem Betreuuer in der Programmiersprache \texttt{R}.
+Auf den Klassifikator in \texttt{R} wird an dieser Stelle nicht weiter eingegangen, da der Aufwand, diesen anschließend in das Java-Programm zu integrieren in keinem Verhältnis zum Nutzen stand.
+Jedoch half mir der, speziell für den Klassifikator erstellte, Trainingsdatensatz (siehe Tabelle \ref{tab:gtfs2osm:trainingset}), gute Schwellwerte der beiden Merkmale Namensgleichheit und Entfernung zu finden. 
 
+\begin{table}[]
+\small
+\centering
+\caption{Beispiel aus dem erstellten Trainingsdatensatz zur Klassifikation zusammenhängender Bahnhofsobjekte}
+\label{tab:gtfs2osm:trainingset}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{gtfs}             & \textbf{osm}        & \textbf{levenshtein} & \textbf{geoDistance} & \textbf{match} \\ \hline
+Bernauer Str. (U), Berlin & U Bernauer Straße   & 0,125                & 0,0008372348         & TRUE           \\ \hline
+Bernauer Str. (U), Berlin & U Voltastraße       & 0,6136363636         & 0,0053660279         & FALSE          \\ \hline
+Bernauer Str. (U), Berlin & U Rosenthaler Platz & 0,6242424242         & 0,0097482731         & FALSE          \\ \hline
+Bernauer Str. (U), Berlin & S Nordbahnhof       & 0,7965367965         & 0,0099496517         & FALSE          \\ \hline
+Yorckstr. (S+U), Berlin   & U Yorckstraße       & 0,3164983165         & 0,0002386729         & TRUE           \\ \hline
+...                       & ...                 & ...                  & ...                  & ...            \\ \hline
+\end{tabular}
+\end{table}
 
-Gold-Standard Berlin...Grafik Zusammenhang Levenshtein und Entfernung...
-Versuch NaiveBayes Klassifikator in R... Kennzahlen F-Measure...
+Ich erstellte ein Hilfsprogramm, welches verschiedene Kombinationen aus Schwellwerten testete. Nachdem es versucht hatte eine Zusammengehörigkeit vorherzusagen, wurden die Kennzahlen \textit{Precision (Genauigkeit)}, \textit{Recall (Trefferquote)} und das \textit{F-Maß} berechnet. Dies sind Kennzahlen zur qualitativen Bewertung eines Klassifikators. (Näheres hierzu in Anhang \ref{sec:appenix:fmeasure}).
+
+Die beste Vorhersage, ob zwei Bahnhöfe zusammengehörten, erzielte ich, wenn die Levenshtein-Distanz $\leq0,825$ und die geographische Distanz $\leq0,0045$ war. Diese Kombination erzielte auf dem Trainingsdatensatz das beste F-Maß mit einem Wert von $0,9842$.
+
 Zweites Problem: Mehrere OSM sowie GTFS Punkte für den gleichen Bahnhof
 
 Erzeugt StationCluster mit Mittelpunktangabe sowie errechnetem Name
