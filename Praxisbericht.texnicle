@@ -88,7 +88,7 @@
         <attribute name="showlogwarningitems" type="bool">0</attribute>
         <attribute name="showloginfoitems" type="bool">0</attribute>
         <attribute name="showlogerroritems" type="bool">1</attribute>
-        <attribute name="pdfviewscrollrect" type="string">{{0, 18753.767320311323}, {604, 864.54901959915878}}</attribute>
+        <attribute name="pdfviewscrollrect" type="string">{{0, 26445.152941194818}, {604, 864.54901960280768}}</attribute>
         <attribute name="showpdfthumbnails" type="bool">0</attribute>
         <attribute name="selectedcontrolstab" type="int16">0</attribute>
         <attribute name="maxoutlinedepth" type="int16">7</attribute>
@@ -204,12 +204,12 @@
     </object>
     <object type="TEXFILE" id="z114">
         <attribute name="wasopen" type="bool">2</attribute>
-        <attribute name="visiblerect" type="string">{{0, 4718}, {886, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">486321727.02719402313232421875</attribute>
+        <attribute name="visiblerect" type="string">{{0, 5356}, {886, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">486332661.08618497848510742188</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">486321728.59734797477722167969</attribute>
+        <attribute name="fileloaddate" type="date">486332661.67855298519134521484</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{22817, 0}</attribute>
+        <attribute name="cursor" type="string">{26148, 0}</attribute>
         <attribute name="sortindex" type="int32">4</attribute>
         <attribute name="name" type="string">chapter2_taetigkeitsbereiche.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -258,12 +258,12 @@
     </object>
     <object type="TEXFILE" id="z117">
         <attribute name="wasopen" type="bool">4</attribute>
-        <attribute name="visiblerect" type="string">{{0, 8562}, {886, 576}}</attribute>
-        <attribute name="lasteditdate" type="date">486315378.45210897922515869141</attribute>
+        <attribute name="visiblerect" type="string">{{0, 8422}, {886, 576}}</attribute>
+        <attribute name="lasteditdate" type="date">486322696.29079198837280273438</attribute>
         <attribute name="istext" type="bool">1</attribute>
-        <attribute name="fileloaddate" type="date">486315382.83020800352096557617</attribute>
+        <attribute name="fileloaddate" type="date">486322697.65067100524902343750</attribute>
         <attribute name="extension" type="string">tex</attribute>
-        <attribute name="cursor" type="string">{28768, 0}</attribute>
+        <attribute name="cursor" type="string">{29155, 0}</attribute>
         <attribute name="sortindex" type="int32">2</attribute>
         <attribute name="name" type="string">chapter4_anlagen.tex</attribute>
         <attribute name="isexpanded" type="bool">0</attribute>
@@ -281,7 +281,7 @@
         <relationship name="parentfile" type="1/1" destination="FILE"></relationship>
     </object>
     <object type="BOOKMARK" id="z119">
-        <attribute name="text" type="string">Das ermöglicht die direkte Extraktion der Geometrie eines Ways ohne sich für jeden Way die Koordinaten aus den Daten selbst aggregieren zu müssen.
+        <attribute name="text" type="string">Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \\ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \\textit{Nodes} (Punkte mit Koordinaten) und \\textit{Ways} (Linien aus Punkten). Die Importwerkzeuge haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
 </attribute>
         <attribute name="linenumber" type="int64">62</attribute>
         <relationship name="parentfile" type="1/1" destination="FILE" idrefs="z114"></relationship>
