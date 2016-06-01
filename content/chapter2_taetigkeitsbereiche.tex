@@ -15,7 +15,7 @@ Das Konsortium besteht aus 4 Wirtschaftsunternehmen und dem DFKI als Forschungse
   \item ]init[ AG für digitale Kommunikation
   \item PS-Team Deutschland GmbH & Co. KG
 \end{compactitem}
-Ziel des SD4M Projekts ist eine branchenübergreifende Serviceplattform, welche Daten der unterschiedlichen Mobilitätsanbieter (z.B. der Fahrplan der Deutschen Bahn) sowie öffentliche verfügbare strukturierte und unstrukturierte Daten (z.B. Twitter oder Facebook) miteinander verknüpft.
+Ziel des SD4M Projekts ist eine branchenübergreifende Serviceplattform, welche Daten der unterschiedlichen Mobilitätsanbieter (z.B. den Fahrplan der Deutschen Bahn) sowie öffentliche verfügbare strukturierte und unstrukturierte Daten (z.B. Twitter oder Facebook) miteinander verknüpft.
 Diese verknüpften Daten sind für Endnutzer, aber auch für Unternehmen oder die öffentliche Verwaltung von Interesse.
 In Abbildung \ref{fig:tweetXfahrplan} wird verdeutlicht, wie sich aus unstrukturierten Twitter-Daten Verspätungsinformationen für konkrete Verkehrsmittel extrahieren lassen.
 Diese können dann Endnutzern oder den Mobilitätsanbietern zur Verfügung gestellt werden.
@@ -30,20 +30,20 @@ Diese können dann Endnutzern oder den Mobilitätsanbietern zur Verfügung geste
 \label{sec:main:preparation}
 Beim ersten Gespräch mit meinem Praktikumsbetreuer Dr. Philippe Thomas informierte ich mich, welche Programmierumgebungen und Programmiersprachen beim DFKI üblich sind.
 Ebenfalls erkundigte ich mich nach einer vorhandenen OpenStreetMap Datenbank und weiterer vorhandener Infrastruktur.
-Wir klärten, dass Java die geeignetste Sprache zur Lösung meiner Aufgaben war. 
+Wir klärten, dass Java die geeignetste Sprache zur Lösung meiner Aufgaben war.
 Ebenfalls war eine OpenStreetMap Datenbank mit dem Datenbestand von Deutschland, sowie ein GitLab Repository Server vorhanden.
 Da ich auf meinem eigenen Notebook entwickeln wollte, installierte ich mir einen virtuellen Linux-Server mit einer PostgreSQL Datenbank um einen kleinen Teil der OpenStreetMap Daten lokal auf meinem Rechner zu haben.
 So konnte ich schneller entwickeln und mit einer wesentlich kleineren Datenbank testen.
 Als Java-Entwicklungsumgebung entschied ich mich für \textit{JetBrains IntelliJ IDEA}\footnote{https://www.jetbrains.com/idea/} und zur Arbeit mit den Datenbanken für \textit{JetBrains DataGrip 2016}\footnote{https://www.jetbrains.com/datagrip/}.
 
 \section{Aufgaben}
-Meine Aufgaben während des Praktikums lassen sich in drei Teilbereiche gliedern. Zunächst sollte ich eine Straßenliste aus OpenStreetMap extrahieren. Anschließend verknüpfte und aggregierte ich Daten, welche von der Deutschen Bahn geliefert wurden, mit Daten aus OpenStreetMap. In den letzten Wochen meiner Praxisphase gab es dann noch verschiedene Datenaufwertungs- und aufbereitungsaufgaben. Auf diese drei Themengebiete werden in diesem Abschnitt nun eingegangen.
+Meine Aufgaben während des Praktikums lassen sich in drei Teilbereiche gliedern. Zunächst sollte ich eine Straßenliste aus OpenStreetMap extrahieren. Anschließend verknüpfte und aggregierte ich Daten, welche von der Deutschen Bahn geliefert wurden, mit Daten aus OpenStreetMap. In den letzten Wochen meiner Praxisphase gab es dann noch verschiedene Datenaufwertungs- und aufbereitungsaufgaben. Auf diese drei Themengebiete wird in diesem Abschnitt eingegangen.
 
 \subsection{Extraktion einer Straßenliste aus OpenStreetMap}
 
 \subsubsection{Aufgabe}
-Meine erste Aufgabe bestand darin, eine Liste aller Straßen Deutschlands inclusive dazugehöriger Geodaten zu erstellen.
-Es sollte eine Java Anwendung erstellt werden, welche via Kommandozeilenargumenten konfiguriert wird, und die entsprechenden Ergebnisse in einer CSV-Datei ablegt.
+Meine erste Aufgabe bestand darin, eine Liste aller Straßen Deutschlands inklusive dazugehöriger Geodaten zu erstellen.
+Es sollte eine Java Anwendung erstellt werden, welche via Kommandozeilenargumenten konfiguriert wird und die entsprechenden Ergebnisse in einer CSV-Datei ablegt.
 Im Ergebnis sollten pro zusammenhängendem Straßensegment die Daten
 \begin{compactitem}
   \item \textbf{ID}, eine fortlaufende Nummer
@@ -140,11 +140,11 @@ Die nun getrennten Ergebnisse pro Straßenname werden in Instanzen vom Typ \text
 Die Klasse \texttt{PstQueries} hält alle \textit{PreparedStatements} für die Datenbankabfragen.
 
 Eine Beispielausgabe des Programms findet sich in Anhang~\ref{sec:appendix:ose:output}.
-   
+
 \subsubsection{Schwierigkeiten}
 Das Testen auf einer kleinen Datenbank beschleunigte zwar die Entwicklung, aber erst der erste Test auf der Hauptdatenbank zeigte massive Performanceprobleme auf.
-Ich hatte wollte meine Anwendung möglichst speicherschonend gestalten und fragte die Ways zu den separaten Straßennamen  einzeln aus der Datenbank ab.
-Dies funktionierte auf meiner lokalen und wesentlich kleineren Testdatenbank sehr gut, jedoch auf Datenbank mit den gesamten Daten Deutschlands annähernd gar nicht.
+Ich wollte meine Anwendung möglichst speicherschonend gestalten und fragte die Ways zu den separaten Straßennamen  einzeln aus der Datenbank ab.
+Dies funktionierte auf meiner lokalen und wesentlich kleineren Testdatenbank sehr gut, jedoch auf der Datenbank mit den gesamten Daten Deutschlands annähernd gar nicht.
 Eine Messung zeigte dass die Abfragen auf der Deutschland-Datenbank mit 300ms Abfragezeit der Flaschenhals waren.
 Ich schrieb letztendlich die Datenbankanbindungsklasse \texttt{OsmosisDB} fast komplett um.
 Statt vieler kleiner Abfragen, welche wenig Daten zurücklieferten, wurden nun wenige Abfragen an die Datenbank gestellt, die jedoch viele Daten lieferten.
@@ -159,24 +159,24 @@ Diese liegen im \textit{General Transit Feed Specification (GTFS)} Format\footno
 Meine Hauptaufgabe bestand darin, eine Abbildung von Bahnhöfen aus den GTFS-Daten der Deutschen Bahn (im folgenden DB-GTFS Daten genannt) auf Objekte aus den OpenStreetMap Daten zu erstellen.
 Mit Hilfe dieser Abbildung ist es möglich, zu Bahnhöfen oder Zugstrecken erweiterte Informationen aus OpenStreetMap zu beziehen, wie zum Beispiel das Bundesland oder Straßen in der Nähe des Bahnhofes.
 
-Als Nebenaufgabe sollte geprüft werden, in wiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
+Als Nebenaufgabe sollte geprüft werden, inwiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
 
 \subsubsection{Lösung}
 Da GTFS-Daten nur aus Textdateien bestehen, sollten diese zur effizienten Verarbeitung in einer Datenbank vorhanden sein.
 Das DFKI hatte die DB-GTFS Daten bereits in einer Datenbank vorliegen, jedoch wollte ich eine lokale Kopie in meiner eigenen Entwicklungsumgebung.
-Zum Import wurde der frei verfügbarer Importer \textit{OpenTransitTools/gtfsdb}\footnote{https://github.com/OpenTransitTools/gtfsdb} verwendet.
+Zum Import wurde der frei verfügbare Importer \textit{OpenTransitTools/gtfsdb}\footnote{https://github.com/OpenTransitTools/gtfsdb} verwendet.
 
 Nun verschaffte ich mir einen Überblick über die vorhandenen Daten und klärte die Frage wie ich die Objekte beider Datenbanken miteinander in Verbindung bringen konnte.
 Ein Bahnhof aus den DB-GTFS Daten wird durch Name und geographischen Koordinaten spezifiziert.
 
 Einen Bahnhof innerhalb von OpenStreetMap auszumachen war ein wenig komplizierter.
 Eine Recherche im OpenStreetMap Wiki\footnote{http://wiki.openstreetmap.org/wiki/Railways} und viele Versuche ergaben dass ein Bahnhof in OpenStreetMap durch einen Node repräsentiert wird, der eine bestimmte Tag-Kombination aufweist.
-Genauer gesagt ein Node, der 
+Genauer gesagt ein Node, der
 \begin{compactitem}
   \item entweder Im Tag \texttt{railway} einen der Werte \texttt{''station''}, \texttt{''halt''} oder \texttt{''stop''}
   \item oder im Tag \texttt{public\_transport} den Wert \texttt{''stop\_position''} und im Tag \texttt{train} den Wert \texttt{''yes''}
 \end{compactitem}
-aufweist. 
+aufweist.
 
 Ich hatte nun also zwei Objektmengen.
 Auf der einen Seite die Menge aller DB-GTFS Bahnhöfe und auf der anderen Seite die Menge aller OpenStreetMap Bahnhöfe.
@@ -193,7 +193,7 @@ Sich alleine auf die Position zu beziehen war nicht möglich, da diese, wie in A
    \caption{Abweichung der geographischen Position in beiden Datenbanken am Beispiel S-Bahnhof Greifswalder Straße Berlin}
    \label{fig:gtfs2osm:geoDiff}
  \end{figure}
-Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnhöfe teilweise sehr nah beieinander, teilweise jedoch auch sehr fern voneinander weg liegen. und hier kein exakter Grenzwert gefunden werden kann. In Abbildung \ref{fig:gtfs2osm:nearNameDiff} sind die beiden zusammengehörigen Bahnhofsobjekte ``Berlin-Wuhlheide'' sowie ``S-Wuhlheide'' nur knapp näher beieinander als das fremde Bahnhofsobjekt ``Wuhlheide-Parkeisenbahn''. Hier müsste man die Grenze bei ca. 100m ziehen. In Abbildung \ref{fig:gtfs2osm:farLikelihood} benötigt man jedoch ca. 120m um die Zugehörigkeit zu erzeugen. Daraus folgt, dass die Entfernung allein ebenfalls kein Kriterium sein kann.
+Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnhöfe teilweise sehr nah beieinander, teilweise jedoch auch sehr fern voneinander weg liegen und hier kein exakter Grenzwert gefunden werden kann. In Abbildung \ref{fig:gtfs2osm:nearNameDiff} sind die beiden zusammengehörigen Bahnhofsobjekte ``Berlin-Wuhlheide'' sowie ``S-Wuhlheide'' nur knapp näher beieinander als das fremde Bahnhofsobjekt ``Wuhlheide-Parkeisenbahn''. Hier müsste man die Grenze bei ca. 100m ziehen. In Abbildung \ref{fig:gtfs2osm:farLikelihood} benötigt man jedoch ca. 120m um die Zugehörigkeit zu erzeugen. Daraus folgt, dass die Entfernung allein ebenfalls kein Kriterium sein kann.
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_nearNameDiff.png}}
@@ -213,7 +213,7 @@ Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Att
 Da es sich um ein Klassifikationsproblem handelte, unternahm ich Versuche das Problem mit einem \textit{Naive Bayse-Klassifikator} zu lösen.
 Diesen implementierte ich zusammen mit meinem Betreuuer in der Programmiersprache \texttt{R}.
 Auf den Klassifikator in \texttt{R} wird an dieser Stelle nicht weiter eingegangen, da der Aufwand, diesen anschließend in das Java-Programm zu integrieren in keinem Verhältnis zum Nutzen stand.
-Jedoch half mir der, speziell für den Klassifikator erstellte, Trainingsdatensatz (siehe Tabelle \ref{tab:gtfs2osm:trainingset}), gute Schwellwerte der beiden Merkmale Namensgleichheit und Entfernung zu finden. 
+Jedoch half mir der, speziell für den Klassifikator erstellte, Trainingsdatensatz (siehe Tabelle \ref{tab:gtfs2osm:trainingset}), gute Schwellwerte der beiden Merkmale Namensgleichheit und Entfernung zu finden.
 
 \begin{table}[]
 \small
@@ -252,13 +252,13 @@ Anschließend prüfte ich, ob bereits ein \texttt{StationCluster} existiert, der
 Wenn ja, dann wurden die DB-GTFS-, sowie die OpenStreetMap Objekte diesem \texttt{StationCluster} hinzugefügt.
 Wenn nicht, dann wurde ein neuer \texttt{StationCluster} angelegt.
 
-Die so erzeugten \texttt{StationCluster} Objekte waren nun das Kernstück meines Ergebnisses und wurden in die Ausgabedatei exportiert. Des weiteren wurde pro Gruppe ein neuer Name erzeugt und Koordinaten ermittelt, welche den Mittelpunkt aller Objekte sowie das umschließende Rechteck abbilden.
+Die so erzeugten \texttt{StationCluster} Objekte waren nun das Kernstück meines Ergebnisses und wurden in die Ausgabedatei exportiert. Des Weiteren wurde pro Gruppe ein neuer Name erzeugt und Koordinaten ermittelt, welche den Mittelpunkt aller Objekte sowie das umschließende Rechteck abbilden.
 
 Ein Ergebnisbeispiel findet sich in Anhang \ref{sec:appendix:gtfs2osm_example}.
 
 \subsubsection{Programmstruktur}
 
-Es wurden erneut externe Bibliotheken (siehe Tabelle \ref{tab:GTFS2OSM:Libraries}). verwendet. 
+Es wurden erneut externe Bibliotheken (siehe Tabelle \ref{tab:GTFS2OSM:Libraries}) verwendet.
 \begin{table}[htb]
 \small
 \centering
@@ -275,7 +275,7 @@ erweiterte Datenstrukturen, z.B. Tabellen & Google Guava          \\ \hline
 \end{tabular}
 \end{table}
 
-Das Programm erhielt den Namen \texttt{GTFS2OSMRailwayLinker}. 
+Das Programm erhielt den Namen \texttt{GTFS2OSMRailwayLinker}.
 Die Struktur des kompletten Programms ist in Abbildung \ref{fig:gtfs2osm:uml_full} ersichtlich.
 Die Klasse \texttt{Main} erzeugt einen \texttt{CSVExporter}, welcher für den Export ins CSV-Format verantwortlich ist.
 Anschließend werden die Datenbankschnittstellen \texttt{GTFSDB} und \texttt{OsmosisDB}, sowie der, für die Gruppenbildung zuständige, \texttt{Clusterizer} angelegt.
@@ -307,19 +307,23 @@ Diese werden letztendlich über den \texttt{CSVExporter} exportiert.
 
 \subsubsection{Schwierigkeiten}
 
-Als Nebenaufgabe sollte geprüft werden, in wiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
+Als Nebenaufgabe sollte geprüft werden, inwiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
 Nach zahlreichen Versuchen stellte sich heraus, dass dies mit den gegebenen Daten nicht möglich ist.
 Die Versuche nahmen sehr viel Zeit in Anspruch.
 Zwar sind aus den DB-GTFS Daten die einzelnen Bahnhöfe pro Linie ableitbar, jedoch existiert keine zuverlässige Information über den exakten Streckenverlauf.
 Das Hauptproblem an dieser Stelle ist, dass das Streckennetz der Deutschen Bahn nur eine Art Straßenkarte ist.
-Es existieren keine öffentlich zugänglichen Informationen, aus denen der genaue Verlauf, zum Beispiel eines bestimmten Fernzuges, ersichtlich ist. 
+Es existieren keine öffentlich zugänglichen Informationen, aus denen der genaue Verlauf, zum Beispiel eines bestimmten Fernzuges, ersichtlich ist.
 
 \subsection{Datenaufwertung und Datenaufbereitung}
 Zum Ende meiner Praxisphase bekam ich noch mehrere kleine Aufgaben.
 Hauptsächlich ging es hier um Aufwertung von Daten oder dem gezielten Export von Daten aus offenen Datenquellen.
 
 Beispielsweise wurde die Aufgabe gestellt, alle Angaben zur Bevölkerungsgröße aus \textit{Wikidata}\footnote{www.wikidata.org} zu extrahieren.
-Dies wurde gelöst, in dem mir eine heruntergeladene Kopie der Daten aus Wikidata zur Verfügung gestellt wurde, und ich diese mit einem Python-Script nach den gesuchten Daten durchsuchte und diese in eine CSV-Datei exportierte.
+Dies wurde gelöst, indem mir eine heruntergeladene Kopie der Daten aus Wikidata zur Verfügung gestellt wurde, und ich diese mit einem Python-Script nach den gesuchten Daten durchsuchte und diese in eine CSV-Datei exportierte.
 
 Eine weitere Aufgabe war es, eine Datenquelle für alle politischen Grenzen der Welt zu suchen und gegebenenfalls eine Datei, welche diese beinhaltet, zu erstellen.
-Nach einer Recherche stellte ich fest, dass solche Daten zwar kostenfrei für Staatsgrenzen zur Verfügung stehen (zum Beispiel von \textit{GeoNames}\footnote{http://www.geonames.org}), jedoch sind Daten für kleinere administrative Bereiche wie zum Beispiel Bundesländer nicht kostenfrei auffindbar. Meine Idee war es nun, dies mit OpenStreetMap Daten zu lösen. In Abschnitt~\ref{osm2pgsql} auf Seite~\pageref{osm2pgsql} erwähnte ich kurz das Werkzeug \textbf{osm2pgsql}\footnote{https://github.com/openstreetmap/osm2pgsql}. Eine, mit diesem Werkzeug importierte, OpenStreetMap Datenbank eignet sich sehr gut zur Extraktion administrativer und politischer Grenzen, da der Hauptzweck der importierten Datenbank das Rendern von Karten ist. Hier wurde innerhalb von osm2pgsql viel Wert auf saubere Erzeugung von Grenzen gelegt. Da ein Import der kompletten \textit{planet.osm) Datei jedoch zu viel Platz in Anspruch nahm, wurde die Grenzextraktion nur exemplarisch anhand der, bereits beim DFKI vorliegenden, deutschen Datenbasis durchgeführt.
+Nach einer Recherche stellte ich fest, dass solche Daten zwar kostenfrei für Staatsgrenzen zur Verfügung stehen (zum Beispiel von \textit{GeoNames}\footnote{http://www.geonames.org}), jedoch sind Daten für kleinere administrative Bereiche wie zum Beispiel Bundesländer nicht kostenfrei auffindbar.
+Meine Idee war es nun, dies mit OpenStreetMap Daten zu lösen. In Abschnitt~\ref{osm2pgsql} auf Seite~\pageref{osm2pgsql} erwähnte ich bereits das Werkzeug \textbf{osm2pgsql}\footnote{https://github.com/openstreetmap/osm2pgsql}.
+Eine, mit diesem Werkzeug importierte, OpenStreetMap Datenbank eignet sich sehr gut zur Extraktion administrativer und politischer Grenzen, da der Hauptzweck der importierten Datenbank das Rendern von Karten ist.
+Hier wurde innerhalb von osm2pgsql viel Wert auf saubere Erzeugung von Grenzen gelegt.
+Da ein Import der kompletten \textit{planet.osm} Datei jedoch zu viel Platz in Anspruch nahm, wurde die Grenzextraktion nur exemplarisch anhand der, bereits beim DFKI vorliegenden, deutschen Datenbasis durchgeführt.
