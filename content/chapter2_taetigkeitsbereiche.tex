@@ -3,7 +3,7 @@
 \section{Überblick}
 \label{sec:main:overview}
 Ich habe im Rahmen meines Praktikums am Projekt \textit{SD4M - Smart Data for Mobility} mitgearbeitet.
-Meine konkrete Aufgabe war die Aufbereitung und Integration verschiedener Daten und Datenbanken, damit diese im Projekt Verwendung finden können. Meine Hauptdatenquelle waren die Geodaten des OpenStreetMap\footnote{http://www.openstreetmap.org/} Projekts.
+Meine konkrete Aufgabe war die Aufbereitung und Integration verschiedener Daten und Datenbanken, damit diese im Projekt Verwendung finden konnten. Meine Hauptdatenquelle waren die Geodaten des OpenStreetMap\footnote{http://www.openstreetmap.org/} Projekts.
 \subsection{Das Projekt SD4M}
 \label{sec:main:overview:sd4m}
 Das Projekt \textit{Smart Data for Mobilty}\footnote{http://sd4m.net/}, im folgenden \textit{SD4M} genannt, ist ein Verbundprojekt eines Konsortiums aus 5 Partnern und wird vom Bundesministerium für Wirtschaft und Energie gefördert.
@@ -15,7 +15,7 @@ Das Konsortium besteht aus 4 Wirtschaftsunternehmen und dem DFKI als Forschungse
   \item ]init[ AG für digitale Kommunikation
   \item PS-Team Deutschland GmbH & Co. KG
 \end{compactitem}
-Ziel des SD4M Projekts ist eine branchenübergreifende Serviceplattform, welche Daten der unterschiedlichen Mobilitätsanbieter (z.B. den Fahrplan der Deutschen Bahn) sowie öffentliche verfügbare strukturierte und unstrukturierte Daten (z.B. Twitter oder Facebook) miteinander verknüpft.
+Ziel des SD4M Projekts ist eine branchenübergreifende Serviceplattform, welche Daten der unterschiedlichen Mobilitätsanbieter (z.B. den Fahrplan der Deutschen Bahn) sowie öffentlich verfügbare strukturierte und unstrukturierte Daten (z.B. Twitter oder Facebook) miteinander verknüpft.
 Diese verknüpften Daten sind für Endnutzer, aber auch für Unternehmen oder die öffentliche Verwaltung von Interesse.
 In Abbildung \ref{fig:tweetXfahrplan} wird verdeutlicht, wie sich aus unstrukturierten Twitter-Daten Verspätungsinformationen für konkrete Verkehrsmittel extrahieren lassen.
 Diese können dann Endnutzern oder den Mobilitätsanbietern zur Verfügung gestellt werden.
@@ -52,18 +52,19 @@ Im Ergebnis sollten pro zusammenhängendem Straßensegment die Daten
   \item \textbf{GeoJSON}, der geographische Straßenverlauf im \textit{GeoJSON} Format (siehe Anlage \ref{sec:appendix:geojson})
 \end{compactitem}
 vorhanden sein.
-Diese Daten sollen anschließend zur geographischen Verortung von Straßen aus Tweets genutzt werden.
+Diese Daten sollten anschließend zur geographischen Verortung von Straßen aus Tweets genutzt werden.
 Eine Beispielausgabe des fertigen Programms findet sich in Anhang~\ref{sec:appendix:ose:output}.
 
 \subsubsection{Lösung}
 
 Für meinen Anwendungsfall, die Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben.
-Die zwei populärsten Werkzeuge sind hierbei \textbf{osm2pgsql}\footnote{https://github.com/openstreetmap/osm2pgsql}\label{osm2pgsql} und \textbf{Osmosis}\footnote{https://github.com/openstreetmap/osmosis}.
-Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten). Die Importwerkzeuge haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
+Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten).
+Importwerkzeuge, welche eine Datenbank aus OpenStreetMap Daten erstellen, haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
 Das ermöglicht die direkte Extraktion der Geometrie eines Ways ohne sich für jeden Way die Koordinaten aus den Daten selbst aggregieren zu müssen.
-Beide Werkzeuge erzeugen unterschiedliche Datenbankschemata.
+Die zwei populärsten Importwerkzeuge zur Erstellung einer Datenbank aus OpenStreetMap Daten sind hierbei \textbf{osm2pgsql}\footnote{https://github.com/openstreetmap/osm2pgsql}\label{osm2pgsql} und \textbf{Osmosis}\footnote{https://github.com/openstreetmap/osmosis}.
+Beide erzeugen unterschiedliche Datenbankschemata.
 
-Das DFKI besitzt Datenbanken, in der die OpenStreetMap Daten Deutschlands mit osm2pgsql sowie Osmosis importiert wurden.
+Das DFKI besitzt Datenbanken, in denen die OpenStreetMap Daten Deutschlands mit osm2pgsql sowie Osmosis importiert wurden.
 Ich informierte mich darüber, welches Schema am verlustfreisten ist.
 \begin{quote}
 ``osm2pgsql is mainly written for rendering data with data. So it only imports tags which are going to be useful for rendering. ... whereas osmosis and osmium more geared towards truthfully representing a full OSM data set.'' \cite{WEB:Giswiki:Osm2pgsql:2015}
@@ -80,6 +81,7 @@ Das Ziel war nun, eine Liste zusammenhängender Ways mit gleichem Name zu aggreg
   \item Ermittlung aller Straßennamen aus der Datenbank
   \item Abfrage aller Ways pro Straßenname
   \item Trennung zusammenhängender Ways in Gruppen
+  \item Aggregation der geographischen Informationen aller Ways einer Gruppe
   \item Export in Zieldatei
 \end{compactenum}
 
@@ -91,7 +93,7 @@ In Abbildung~\ref{fig:ose:osm_streetgroups_1} ist ein Kartenausschnitt mit allen
    \caption{Kartenauszug verschiedener Straßengruppen am Beispiel ``Berliner Straße''}
    \label{fig:ose:osm_streetgroups_1}
  \end{figure}
-In diesem sind 5 Way-Gruppen dargestellt.
+In diesem sind 5 Way-Gruppen erkennbar.
 Optisch ist das Problem der Trennung einfach zu lösen, jedoch war mir nicht auf Anhieb klar wie ich das programatisch lösen sollte.
 Ich habe die Problemstellung dann weiter abstrahiert und kam auf die Idee die Ways und die dazugehörigen Nodes als Graph zu verstehen. Schematisch ist das in Abbildung~\ref{fig:ose:osm_streetgroups_2} dargestellt.
 \begin{figure}[htb]
@@ -109,7 +111,7 @@ Ich musste mir also im Voraus die Verbindungen der einzelnen Knoten speichern un
 Der vollständige Quellcode der entsprechenden Klasse \texttt{GraphSeparator.java} ist in Anhang~\ref{sec:appenix:ose:graphseparator} angefügt.
 
 \subsubsection{Programmstruktur}
-Für viele Problemstellungen innerhalb des zu erstellenden Programms wurden externe Bibliotheken verwendet (Siehe Tabelle \ref{tab:OsmosisStreetExtractor:Libraries}).
+Für viele Problemstellungen innerhalb des erstellten Programms wurden externe Bibliotheken verwendet (Siehe Tabelle \ref{tab:OsmosisStreetExtractor:Libraries}).
 Die Ahängigkeiten wurden mit \textit{Apache Maven}\footnote{http://maven.apache.org} verwaltet.
 \begin{table}[htb]
 \centering
@@ -133,11 +135,11 @@ Aufbau eines Graphen                      & org.jgrapht.jgrapht-core           \
  \end{figure}
 
 Das Programm erhielt den Namen \textbf{\texttt{OsmosisStreetExtractor}}. Die Struktur wird in Abbildung~\ref{fig:ose:uml} gezeigt.
-Die Klasse \texttt{Main} erzeugt hierbei eine Instanz vom Typ \texttt{OsmosisDB} welche die Datenbankverbindung verwaltet.
+Die Klasse \texttt{Main} erzeugt eine Instanz vom Typ \texttt{OsmosisDB} welche die Datenbankverbindung verwaltet.
 Innerhalb von \texttt{OsmosisDB} werden nun alle Straßennamen Deutschlands ermittelt und in einer Liste aus \texttt{StreetGroup} Instanzen gespeichert.
 Anschließend verarbeitet \texttt{Main} alle \texttt{StreetGroup} Objekte und sendet sie zur Trennung in zusammenhängende Segmente an den \texttt{GraphSeparator}.
 Die nun getrennten Ergebnisse pro Straßenname werden in Instanzen vom Typ \texttt{ClusterResult} abgelegt, welche dann in die Ausgabedatei geschrieben werden.
-Die Klasse \texttt{PstQueries} hält alle \textit{PreparedStatements} für die Datenbankabfragen.
+Die Klasse \texttt{PstQueries} hält alle \texttt{PreparedStatements} für die Datenbankabfragen.
 
 Eine Beispielausgabe des Programms findet sich in Anhang~\ref{sec:appendix:ose:output}.
 
@@ -167,7 +169,7 @@ Das DFKI hatte die DB-GTFS Daten bereits in einer Datenbank vorliegen, jedoch wo
 Zum Import wurde der frei verfügbare Importer \textit{OpenTransitTools/gtfsdb}\footnote{https://github.com/OpenTransitTools/gtfsdb} verwendet.
 
 Nun verschaffte ich mir einen Überblick über die vorhandenen Daten und klärte die Frage wie ich die Objekte beider Datenbanken miteinander in Verbindung bringen konnte.
-Ein Bahnhof aus den DB-GTFS Daten wird durch Name und geographischen Koordinaten spezifiziert.
+Ein Bahnhof aus den DB-GTFS Daten wird durch Name und geographische Koordinaten spezifiziert.
 
 Einen Bahnhof innerhalb von OpenStreetMap auszumachen war ein wenig komplizierter.
 Eine Recherche im OpenStreetMap Wiki\footnote{http://wiki.openstreetmap.org/wiki/Railways} und viele Versuche ergaben dass ein Bahnhof in OpenStreetMap durch einen Node repräsentiert wird, der eine bestimmte Tag-Kombination aufweist.
@@ -186,14 +188,14 @@ Im Gespräch mit meinem Betreuer stellte sich heraus, dass es sich hierbei um ei
 Es muss für jede Objektkombination die Frage beantwortet werden, ob diese zusammengehören oder nicht.
 Um dies festzustellen hatte ich zwei Attribute, zum einen die geographische Position und zum anderen den Name.
 
-Sich alleine auf die Position zu beziehen war nicht möglich, da diese, wie in Abbildung \ref{fig:gtfs2osm:geoDiff} gezeigt, in beiden Datenquellen leicht voneinander abwichen.
+Sich alleine auf die Position zu beziehen war nicht möglich, da diese, wie in Abbildung \ref{fig:gtfs2osm:geoDiff} gezeigt, in beiden Datenquellen leicht voneinander abweichen.
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_geoDiff.png}}
    \caption{Abweichung der geographischen Position in beiden Datenbanken am Beispiel S-Bahnhof Greifswalder Straße Berlin}
    \label{fig:gtfs2osm:geoDiff}
  \end{figure}
-Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnhöfe teilweise sehr nah beieinander, teilweise jedoch auch sehr fern voneinander weg liegen und hier kein exakter Grenzwert gefunden werden kann. In Abbildung \ref{fig:gtfs2osm:nearNameDiff} sind die beiden zusammengehörigen Bahnhofsobjekte ``Berlin-Wuhlheide'' sowie ``S-Wuhlheide'' nur knapp näher beieinander als das fremde Bahnhofsobjekt ``Wuhlheide-Parkeisenbahn''. Hier müsste man die Grenze bei ca. 100m ziehen. In Abbildung \ref{fig:gtfs2osm:farLikelihood} benötigt man jedoch ca. 120m um die Zugehörigkeit zu erzeugen. Daraus folgt, dass die Entfernung allein ebenfalls kein Kriterium sein kann.
+Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zusammengehörige Bahnhofsobjekte teilweise sehr nah beieinander, zusammengehörige Bahnhofsobjekte jedoch auch sehr fern voneinander weg liegen und hier kein exakter Grenzwert gefunden werden konnte. In Abbildung \ref{fig:gtfs2osm:nearNameDiff} sind die beiden zusammengehörigen Bahnhofsobjekte ``Berlin-Wuhlheide'' sowie ``S-Wuhlheide'' nur knapp näher beieinander als das fremde Bahnhofsobjekt ``Wuhlheide-Parkeisenbahn''. Hier müsste man die Grenze bei ca. 100m ziehen. In Abbildung \ref{fig:gtfs2osm:farLikelihood} benötigt man jedoch ca. 120m um die Zugehörigkeit zu erzeugen. Daraus folgt, dass die Entfernung allein ebenfalls kein Kriterium sein kann.
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_nearNameDiff.png}}
@@ -206,9 +208,12 @@ Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zugehörige Bahnh
    \caption{Entfernungen zwischen zusammengehörigen Bahnhofsobjekten 120m}
    \label{fig:gtfs2osm:farLikelihood}
  \end{figure}
+
 Der Name konnte ebenfalls nicht alleinstehend als Schlüssel verwendet werden. Zum Beispiel existiert in den DB-GTFS Daten ein Objekt names ``Berlin Hbf'' und in den OpenStreetMap Daten ein Objekt names ``S Hauptbahnhof''. Diese Objekte gehören zusammen, ihre Bezeichnungen sind jedoch stark unterschiedlich.
 
-Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Attribute (Name sowie geographische Entfernung) vornehmen konnte. Zum Vergleich der String Ähnlichkeit entschied ich mich für eine normalisierte Variante der \textit{Levenshtein-Distanz}, welche einen Wert im Interval $[0,1]$ ermittelt, wobei $0$ bedeutet beide Strings sind gleich und $1$ dass beide Strings vollständig unterschiedlich sind. Details zur genauen Methode finden sich in Anhang \ref{sec:appendix:levenshtein}.
+Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Attribute (Name sowie geographische Entfernung) vornehmen konnte. Zum Vergleich der String-Ähnlichkeit entschied ich mich für eine normalisierte Variante der \textit{Levenshtein-Distanz}, welche einen Wert im Interval $[0,1]$ ermittelt.
+$0$ bedeutet dass beide Strings gleich, und $1$ dass beide Strings vollständig unterschiedlich sind.
+Details zur genauen Methode finden sich in Anhang \ref{sec:appendix:levenshtein}.
 
 Da es sich um ein Klassifikationsproblem handelte, unternahm ich Versuche das Problem mit einem \textit{Naive Bayse-Klassifikator} zu lösen.
 Diesen implementierte ich zusammen mit meinem Betreuuer in der Programmiersprache \texttt{R}.
@@ -238,7 +243,7 @@ Die beste Vorhersage, ob zwei Bahnhöfe zusammengehörten, erzielte ich, wenn di
 
 Nun hatte ich eine Lösung, mit der ich die zu einem DB-GTFS Bahnhofsobjekt zugehörigen OpenStreetMap Bahnhofsobjekte finden konnte. Jedoch gab es innerhalb der DB-GTFS Daten auch teilweise mehrere Bahnhofsobjekte pro Bahnhof.
 Dies löste ich, in dem ich einen Bahnhof als Sammlung aus verschiedenen DB-GTFS-, sowie OpenStreetMap Objekten verstand.
-Diese Sammlung repräsentierte ich als \texttt{StationCluster}-Objekte (siehe Abbildung \ref{fig:gtfs2osm:stationcluster}).
+Diese Sammlungen repräsentierte ich als \texttt{StationCluster}-Objekte (siehe Abbildung \ref{fig:gtfs2osm:stationcluster}).
 
 \begin{figure}[htb]
    \centering
@@ -283,14 +288,14 @@ Dies ist in Abbildung \ref{fig:gtfs2osm:uml_main} zu erkennen.
 Der \texttt{Clusterizer} iteriert nun über die DB-GTFS Objekte und legt \texttt{StationCluster} an (siehe Abbildung \ref{fig:gtfs2osm:uml_stationcluster}).
 Diese werden letztendlich über den \texttt{CSVExporter} exportiert.
 
-\begin{figure}[htb]
+\begin{figure}[H]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_full.png}}
    \caption{Klassendiagramm GTFS2OSMRailwayLinker}
    \label{fig:gtfs2osm:uml_full}
  \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[H]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_main.png}}
    \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf Main}
@@ -298,7 +303,7 @@ Diese werden letztendlich über den \texttt{CSVExporter} exportiert.
  \end{figure}
 
 
-\begin{figure}[htb]
+\begin{figure}[H]
    \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs2osm_uml_stationcluster.png}}
    \caption{Auszug aus dem Klassendiagramm GTFS2OSMRailwayLinker Fokus auf StationCluster}
@@ -319,7 +324,8 @@ Zum Ende meiner Praxisphase bekam ich noch mehrere kleine Aufgaben.
 Hauptsächlich ging es hier um Aufwertung von Daten oder dem gezielten Export von Daten aus offenen Datenquellen.
 
 Beispielsweise wurde die Aufgabe gestellt, alle Angaben zur Bevölkerungsgröße aus \textit{Wikidata}\footnote{www.wikidata.org} zu extrahieren.
-Dies wurde gelöst, indem mir eine heruntergeladene Kopie der Daten aus Wikidata zur Verfügung gestellt wurde, und ich diese mit einem Python-Script nach den gesuchten Daten durchsuchte und diese in eine CSV-Datei exportierte.
+Hierzu lud ich mir eine Kopie der aktuellen Wikidata-Datenbank herunter.
+Diese im JSON-Format vorliegende Datei wurde anschließend mit einem Python-Script nach den gesuchten Daten durchsucht und die Ergebnisse in eine CSV-Datei exportiert.
 
 Eine weitere Aufgabe war es, eine Datenquelle für alle politischen Grenzen der Welt zu suchen und gegebenenfalls eine Datei, welche diese beinhaltet, zu erstellen.
 Nach einer Recherche stellte ich fest, dass solche Daten zwar kostenfrei für Staatsgrenzen zur Verfügung stehen (zum Beispiel von \textit{GeoNames}\footnote{http://www.geonames.org}), jedoch sind Daten für kleinere administrative Bereiche wie zum Beispiel Bundesländer nicht kostenfrei auffindbar.

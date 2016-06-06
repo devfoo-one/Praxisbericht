@@ -3,7 +3,7 @@
 \section{Well-Known-Binary Format (WKB)}
 \label{sec:appendix:wkb}
 Das \textit{Well-Known-Binary} Format ist die binäre Repräsentation eines geometrischen Objekts des \textit{Simple Feature Models}.
-Das Simple Feature Model ist eine Untermenge des ISO 19107 Standards, welcher die geometrischen Eigenschaften von Geoobjekten spezifiziert. Ausgehend von einer allgemeinen Oberklasse können geometrische Primitive, wie z.B. ein Punkt, oder komplexe geometrische Objekte, wie z.B. Flächen oder Sammlungen von Objekten, beschrieben werden. (vgl. \cite{Bill2010}:358ff.). Die verfügbaren Klassen werden in Abbildung \ref{fig:bill_sfm} aufgezeigt.
+Dieses Modell ist eine Untermenge des ISO 19107 Standards, welcher die geometrischen Eigenschaften von Geoobjekten spezifiziert. Ausgehend von einer allgemeinen Oberklasse können geometrische Primitive, wie z.B. ein Punkt, oder komplexe geometrische Objekte, wie z.B. Flächen oder Sammlungen von Objekten, beschrieben werden. (vgl. \cite{Bill2010}:358ff.). Die verfügbaren Klassen werden in Abbildung \ref{fig:bill_sfm} aufgezeigt.
 \begin{figure}[!htb]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/bill_sfm001.jpg}}
@@ -12,7 +12,7 @@ Das Simple Feature Model ist eine Untermenge des ISO 19107 Standards, welcher di
 \end{figure}
 
 Das WKB Format wird beispielsweise innerhalb der PostgreSQL Erweiterung PostGIS\footnote{http://postgis.net} genutzt, um geometrische Objekte in einer Datenbank abzulegen.
-Analog dazu existiert das \textit{Well-Known-Text} Format, welches die textuelle Repräsentation geometrische Objekte des Simple Feature Models spezifiziert.
+Analog dazu existiert das \textit{Well-Known-Text} Format, welches die textuelle Repräsentation geometrischer Objekte des Simple Feature Models spezifiziert.
 
 \subsubsection{Beispiel für das WKB und das WKT Format}
 Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord} entspricht der WKT Repräsentation\\\\
@@ -46,15 +46,16 @@ Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord
 
 \section{OpenStreetMap Datenformat}
 \label{sec:appendix:osm:data}
-OpenStreetMap bietet seine Daten zum Download in einer Datei, \textit{planet.osm}\footnote{http://planet.openstreetmap.org/}, an. Diese Datei im XML-Format enthält den kompletten Datenbestand des OpenStreetMap Projekts. 
+OpenStreetMap bietet seine Daten zum Download in einer Datei namens \textit{planet.osm}\footnote{http://planet.openstreetmap.org/} an. Diese Datei im XML-Format enthält den kompletten Datenbestand des OpenStreetMap Projekts. 
 Da diese Datei sehr groß ist (gepackt ca. 50GB) bieten andere Dienstleister wie zum Beispiel die Geofabrik GmbH Karlsruhe\footnote{http://www.geofabrik.de} auch kleinere Bereiche des Datenbestandes, zum Beispiel nur Deutschland, an.
 Zur Speicherung der Daten werden die Elemente \textit{Nodes}, \textit{Ways} und \textit{Relations} verwendet. (vgl. \cite{WEB:OSM:Primitives:2015})
 \begin{compactitem}
-  \item \textbf{Nodes}, ein geometrischer Punkt, welcher durch geographische Breite und Länge bestimmt ist
-  \item \textbf{Ways}, ein Linienzug zwischen mehreren Punkten. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert
-  \item \textbf{Relations}, eine logische Gruppierung mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen oder ein Bahnhof. 
+  \item \textbf{Nodes}: geometrische Punkte, welche durch geographische Breite und Länge bestimmt sind
+  \item \textbf{Ways}: Verbindungen zwischen mehreren Nodes. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert
+  \item \textbf{Relations}: logische Gruppierungen mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen. 
 \end{compactitem}
-Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags}, beschrieben. Hier wird beispielsweise festgelegt, ob ein Way eine Straße abbildet oder einen Fluss.
+Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags}, beschrieben.
+Hiermit wird beispielsweise festgelegt, ob ein Way eine Straße abbildet oder einen Fluss.
 
 \subsubsection{Beispiel eines Nodes}
 
@@ -144,7 +145,7 @@ Im Listing \ref{code:osm_streets} Zeile 13 und 44 ist ein Beispiel dafür ersich
 \begin{figure}[htb]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/osm_streets_1.jpg}}
-   \caption{Teilausschnitt der Greifswalder Straße}
+   \caption{Teilausschnitt einer Straße aus OpenStreetMap}
    \label{fig:osm_streets_1}
 \end{figure}
 Die Unterteilung einer Straße in mehrere Ways ist mitunter notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. die zulässige Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind. Sofern sich diese Daten im Straßenverlauf ändern, wird dies durch einen separates Way-Element wiedergegeben.
@@ -438,18 +439,13 @@ public class GraphSeparator {
 
 \section{Beispielausgabe der Straßenliste des OsmosisStreetExtractor}
 \label{sec:appendix:ose:output}
-Es folgt eine Beispielausgabe des \texttt{OsmosisStreetExtractor}.
+Es folgt eine Beispielausgabe des \texttt{OsmosisStreetExtractor} in Listing \ref{ose_outputexample}.
 Der Inhalt des Feldes \texttt{linestring} wurde aus Gründen der Lesbarkeit gekürzt.
-
 \lstset{
   language=,
   numbers=left,
   caption=Beispielausgabe des OsmosisStreetExtractor,
-  label=,
-  keywordstyle=,
-  stringstyle=,
-  commentstyle=,
-  morecomment=,
+  label=ose_outputexample,
 }
 \begin{lstlisting}
 "id";"name";"linestring";"geojson"
@@ -458,8 +454,8 @@ Der Inhalt des Feldes \texttt{linestring} wurde aus Gründen der Lesbarkeit gek�
 
 \section{General Transit Feed Specification (GTFS)}
 \label{sec:appendix:gtfs_spec}
-Hier findet sich, auszugsweise, eine kurze Übersicht des \textit{General Transit Feed Specification (GTFS)} Formates.
-GTFS Daten bestehen aus mehreren gepackten Textdateien.
+Auszugsweise findet sich hier eine kurze Übersicht des \textit{General Transit Feed Specification (GTFS)} Formates.
+GTFS Daten bestehen aus mehreren Textdateien, welche in einem komprimierten Paket vorliegen.
 Eine Übersicht über die benötigten Dateien innerhalb eines GTFS Pakets und deren Inhalt ist in Tabelle \ref{tab:gtfs_files} und Abbildung \ref{fig:gtfs_uml} dargestellt. (vgl. \cite{WEB:Google:gtfs:2016})
 
 
@@ -479,23 +475,29 @@ calendar.txt    & Tage, an denen ein Dienst verfügbar ist \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{figure}[!hp]
+\begin{figure}[H]
   \centering
    \fbox{\includegraphics[width=1\textwidth]{gfx/gtfs_uml.png}}
    \caption{Felder innerhalb von GTFS Daten}
    \label{fig:gtfs_uml}
 \end{figure}
 
-\section{Levenshtein Distanz zur Ermittlung der Ähnlichkeit zweier Bahnhofsnamen}
+\section{Levenshtein-Distanz zur Ermittlung der Ähnlichkeit zweier Bahnhofsnamen}
 \label{sec:appendix:levenshtein}
-Die \textit{Levenshtein Distanz} zwischen zwei Zeichenketten gibt die Anzahl der Editieroperationen zurück, die notwendig sind um die eine Zeichenkette in die andere zu transformieren.
-Der Größe des ermittelten Wertes kann, je nach Länge der Zeichenketten variieren. 
+Die \textit{Levenshtein-Distanz} zwischen zwei Zeichenketten gibt die Anzahl der Editieroperationen zurück, die notwendig sind um die eine Zeichenkette in die andere zu transformieren.
+Der Größe des ermittelten Wertes kann, je nach Länge der Zeichenketten, variieren. 
 Die verwendete Bibliothek \textit{java-string-similarity}\footnote{https://github.com/tdebatty/java-string-similarity} bietet die Möglichkeit, eine normalisierte Levenshtein-Distanz zu ermitteln. Dazu wird die ermittelte Levenshtein-Distanz anschließend durch die Länge der längsten Zeichenkette dividiert.
 Diese Operation ergibt ein Interval $[0,1]$.
 
-Nun musste ein Algorithmus entwickelt werden, der die normalisierte Levenshtein-Distanz ein bisschen besser auf das Themengebiet Bahnhofsbezeichnungen vorbereitet. Ein Beispiel hierfür sind die Zeichenketten \texttt{''Hauptbahnhof Berlin''} und \texttt{''Berlin Hauptbahnhof''}. Offensichtlich bezeichnen diese den selben Bahnhof, jedoch entspricht die Levenshtein-Distanz zwischen den Zeichenketten $14$ und die normalisierte Levenshtein-Distanz $14/19\approx0,737$.
+Nun musste ein Algorithmus entwickelt werden, der die normalisierte Levenshtein-Distanz besser auf das Themengebiet Bahnhofsbezeichnungen vorbereitet.
+Strings von Bahnhofsbezeichnungen sind zum Beispiel 
+\begin{compactitem}
+  \item \texttt{''Hauptbahnhof Berlin''}
+  \item \texttt{''Berlin Hauptbahnhof''}
+\end{compactitem}
+Offensichtlich bezeichnen diese den selben Bahnhof, jedoch entspricht die Levenshtein-Distanz zwischen den beiden Zeichenketten $14$ und die normalisierte Levenshtein-Distanz $14/19\approx0,737$.
  
-Ich entschied mich dazu, die Zeichenketten vor dem Vergleich zu \textit{tokenizen}, das bedeutet die Zeichenkette anhand bestimmter Trennungszeichen in eine Liste aus Teilzeichenketten aufzuteilen. Dazu wurde die Klasse \texttt{java.util.StringTokenizer} verwendet (Siehe Listing \ref{lev_sum} Zeile 74-81). Anschließend werden die Tokens der beiden zu vergleichenden Zeichenketten alle miteinander verglichen und die jeweils niedrigsten Levenshtein-Distanzen, gewichtet anhand der Länge des kürzeren Tokens aufsummiert (Siehe Listing \ref{lev_sum}). Dies sorgt zum Beispiel dafür, dass die zu Beginn erwähnten Zeichenketten \texttt{''Hauptbahnhof Berlin''} und \texttt{''Berlin Hauptbahnhof''} eine Distanz von $0$ aufweisen.
+Ich entschied mich dazu, die Zeichenketten vor dem Vergleich zu \textit{tokenizen}, das bedeutet die Zeichenkette anhand bestimmter Trennungszeichen in eine Liste aus Teilzeichenketten aufzuteilen. Dazu wurde die Klasse \texttt{java.util.StringTokenizer} verwendet (Siehe Listing \ref{lev_sum} Zeile 74-81). Anschließend werden die Tokens der beiden zu vergleichenden Zeichenketten alle miteinander verglichen und die jeweils niedrigsten Levenshtein-Distanzen, gewichtet anhand der Länge des kürzeren Tokens aufsummiert (Siehe Listing \ref{lev_sum}). Dies sorgt zum Beispiel dafür, dass die zu Beginn erwähnten Zeichenketten \textit{''Hauptbahnhof Berlin''} und \textit{''Berlin Hauptbahnhof''} eine Distanz von $0$ aufweisen.
 
 \lstset{
   language=Java,
@@ -637,7 +639,7 @@ $$Precision = \frac{TP}{TP + FP}$$
 
 \subsubsection{Recall (Trefferquote)}
 
-Der \textit{Recall-Wert} gibt das Verhältnis zwischen allen korrekt als positiv vorhergesagten Objekte an der Gesamtheit der tatsächlich positiven Objekte an. Vereinfacht gesagt, wie viele positive Ergebnisse wurden wirklich gefunden.
+Der \textit{Recall-Wert} gibt das Verhältnis zwischen allen korrekt als positiv vorhergesagten Objekten an der Gesamtheit der tatsächlich positiven Objekte an. Vereinfacht gesagt, wie viele positive Ergebnisse wurden wirklich gefunden.
 $$Recall = \frac{TP}{TP + FN}$$
 
 \subsubsection{F-Maß}
