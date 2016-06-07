@@ -31,7 +31,7 @@ Diese können dann Endnutzern oder den Mobilitätsanbietern zur Verfügung geste
 Beim ersten Gespräch mit meinem Praktikumsbetreuer Dr. Philippe Thomas informierte ich mich, welche Programmierumgebungen und Programmiersprachen beim DFKI üblich sind.
 Ebenfalls erkundigte ich mich nach einer vorhandenen OpenStreetMap Datenbank und weiterer vorhandener Infrastruktur.
 Wir klärten, dass Java die geeignetste Sprache zur Lösung meiner Aufgaben war.
-Ebenfalls war eine OpenStreetMap Datenbank mit dem Datenbestand von Deutschland, sowie ein GitLab Repository Server vorhanden.
+Ebenfalls waren eine OpenStreetMap Datenbank mit dem Datenbestand von Deutschland, sowie ein GitLab Repository Server vorhanden.
 Da ich auf meinem eigenen Notebook entwickeln wollte, installierte ich mir einen virtuellen Linux-Server mit einer PostgreSQL Datenbank um einen kleinen Teil der OpenStreetMap Daten lokal auf meinem Rechner zu haben.
 So konnte ich schneller entwickeln und mit einer wesentlich kleineren Datenbank testen.
 Als Java-Entwicklungsumgebung entschied ich mich für \textit{JetBrains IntelliJ IDEA}\footnote{https://www.jetbrains.com/idea/} und zur Arbeit mit den Datenbanken für \textit{JetBrains DataGrip 2016}\footnote{https://www.jetbrains.com/datagrip/}.
@@ -57,7 +57,7 @@ Eine Beispielausgabe des fertigen Programms findet sich in Anhang~\ref{sec:appen
 
 \subsubsection{Lösung}
 
-Für meinen Anwendungsfall, die Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben.
+Für meinen Anwendungsfall, der Filterung und Extraktion von Daten, war es notwendig, die OpenStreetMap Daten in einer Datenbank vorliegen zu haben.
 Der Hauptgrund hierfür ist dem Datenformat der OpenStreetMap Daten geschuldet. Wie im Anhang \ref{sec:appendix:osm:data} aufgezeigt, beinhalten die OpenStreetMap Daten \textit{Nodes} (Punkte mit Koordinaten) und \textit{Ways} (Linien aus Punkten).
 Importwerkzeuge, welche eine Datenbank aus OpenStreetMap Daten erstellen, haben die nützliche Eigenschaft, die Koordinaten aller Punkte eines Weges zu aggregieren.
 Das ermöglicht die direkte Extraktion der Geometrie eines Ways ohne sich für jeden Way die Koordinaten aus den Daten selbst aggregieren zu müssen.
@@ -159,7 +159,7 @@ Das DFKI arbeitet mit Daten, welche von der Deutschen Bahn bereitgestellt wurden
 Diese liegen im \textit{General Transit Feed Specification (GTFS)} Format\footnote{https://developers.google.com/transit/gtfs/} vor, einem Datenformat zur Veröffentlichung von Fahrplänen und dazugehörigen Informationen wie zum Beispiel geographischer Positionen der Bahnhöfe. Hierzu ist auch eine kurze Beschreibung in Anhang \ref{sec:appendix:gtfs_spec} verfügbar.
 
 Meine Hauptaufgabe bestand darin, eine Abbildung von Bahnhöfen aus den GTFS-Daten der Deutschen Bahn (im folgenden DB-GTFS Daten genannt) auf Objekte aus den OpenStreetMap Daten zu erstellen.
-Mit Hilfe dieser Abbildung ist es möglich, zu Bahnhöfen oder Zugstrecken erweiterte Informationen aus OpenStreetMap zu beziehen, wie zum Beispiel das Bundesland oder Straßen in der Nähe des Bahnhofes.
+Mit Hilfe dieser Abbildung ist es möglich, zu Bahnhöfen oder Zugstrecken erweiterte Informationen aus OpenStreetMap zu beziehen, wie zum Beispiel das Bundesland oder die Straßen in der Nähe des Bahnhofes.
 
 Als Nebenaufgabe sollte geprüft werden, inwiefern sich aus den kombinierten Daten ein geographisch exakter Streckenverlauf eines Zuges für die graphische Darstellung ermitteln lässt.
 
@@ -182,13 +182,13 @@ aufweist.
 
 Ich hatte nun also zwei Objektmengen.
 Auf der einen Seite die Menge aller DB-GTFS Bahnhöfe und auf der anderen Seite die Menge aller OpenStreetMap Bahnhöfe.
-Nun musste Ich einen Weg finden um zu beschreiben welche DB-GTFS Bahnhöfe zu welchem OpenStreetMap Bahnhöfen gehören.
+Nun musste Ich einen Weg finden um zu beschreiben welche DB-GTFS Bahnhöfe zu welchen OpenStreetMap Bahnhöfen gehören.
 
 Im Gespräch mit meinem Betreuer stellte sich heraus, dass es sich hierbei um ein klassisches \textit{Klassifikationsproblem} handelt.
 Es muss für jede Objektkombination die Frage beantwortet werden, ob diese zusammengehören oder nicht.
 Um dies festzustellen hatte ich zwei Attribute, zum einen die geographische Position und zum anderen den Name.
 
-Sich alleine auf die Position zu beziehen war nicht möglich, da diese, wie in Abbildung \ref{fig:gtfs2osm:geoDiff} gezeigt, in beiden Datenquellen leicht voneinander abweichen.
+Sich alleine auf die geographischen Positionen zu beziehen war nicht möglich, da diese, wie in Abbildung \ref{fig:gtfs2osm:geoDiff} gezeigt, in beiden Datenquellen leicht voneinander abweichen.
 \begin{figure}[htb]
    \centering
    \fbox{\includegraphics[width=0.7\textwidth]{gfx/gtfs2osm_geoDiff.png}}
@@ -212,13 +212,13 @@ Ebensowenig konnte eine Bereichssuche genutzt werden, da nicht zusammengehörige
 Der Name konnte ebenfalls nicht alleinstehend als Schlüssel verwendet werden. Zum Beispiel existiert in den DB-GTFS Daten ein Objekt names ``Berlin Hbf'' und in den OpenStreetMap Daten ein Objekt names ``S Hauptbahnhof''. Diese Objekte gehören zusammen, ihre Bezeichnungen sind jedoch stark unterschiedlich.
 
 Mir wurde klar, dass ich die Klassifikation nur durch die Kombination beider Attribute (Name sowie geographische Entfernung) vornehmen konnte. Zum Vergleich der String-Ähnlichkeit entschied ich mich für eine normalisierte Variante der \textit{Levenshtein-Distanz}, welche einen Wert im Interval $[0,1]$ ermittelt.
-$0$ bedeutet dass beide Strings gleich, und $1$ dass beide Strings vollständig unterschiedlich sind.
+Der Wert $0$ bedeutet dass beide Strings gleich, und $1$ dass beide Strings vollständig unterschiedlich sind.
 Details zur genauen Methode finden sich in Anhang \ref{sec:appendix:levenshtein}.
 
 Da es sich um ein Klassifikationsproblem handelte, unternahm ich Versuche das Problem mit einem \textit{Naive Bayse-Klassifikator} zu lösen.
 Diesen implementierte ich zusammen mit meinem Betreuuer in der Programmiersprache \texttt{R}.
 Auf den Klassifikator in \texttt{R} wird an dieser Stelle nicht weiter eingegangen, da der Aufwand, diesen anschließend in das Java-Programm zu integrieren in keinem Verhältnis zum Nutzen stand.
-Jedoch half mir der, speziell für den Klassifikator erstellte, Trainingsdatensatz (siehe Tabelle \ref{tab:gtfs2osm:trainingset}), gute Schwellwerte der beiden Merkmale Namensgleichheit und Entfernung zu finden.
+Jedoch half mir der speziell für den Klassifikator erstellte Trainingsdatensatz (siehe Tabelle \ref{tab:gtfs2osm:trainingset}) gute Schwellwerte der beiden Merkmale Namensgleichheit und Entfernung zu finden.
 
 \begin{table}[]
 \small
@@ -242,7 +242,7 @@ Ich erstellte ein Hilfsprogramm, welches verschiedene Kombinationen aus Schwellw
 Die beste Vorhersage, ob zwei Bahnhöfe zusammengehörten, erzielte ich, wenn die Levenshtein-Distanz $\leq0,825$ und die geographische Distanz $\leq0,0045$ war. Diese Kombination erzielte auf dem Trainingsdatensatz das beste F-Maß mit einem Wert von $0,9842$.
 
 Nun hatte ich eine Lösung, mit der ich die zu einem DB-GTFS Bahnhofsobjekt zugehörigen OpenStreetMap Bahnhofsobjekte finden konnte. Jedoch gab es innerhalb der DB-GTFS Daten auch teilweise mehrere Bahnhofsobjekte pro Bahnhof.
-Dies löste ich, in dem ich einen Bahnhof als Sammlung aus verschiedenen DB-GTFS-, sowie OpenStreetMap Objekten verstand.
+Dies löste ich, indem ich einen Bahnhof als Sammlung aus verschiedenen DB-GTFS-, sowie OpenStreetMap Objekten verstand.
 Diese Sammlungen repräsentierte ich als \texttt{StationCluster}-Objekte (siehe Abbildung \ref{fig:gtfs2osm:stationcluster}).
 
 \begin{figure}[htb]

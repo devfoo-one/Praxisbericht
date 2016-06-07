@@ -17,8 +17,10 @@ Analog dazu existiert das \textit{Well-Known-Text} Format, welches die textuelle
 \subsubsection{Beispiel für das WKB und das WKT Format}
 Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord} entspricht der WKT Repräsentation\\\\
 \texttt{SRID=4326;POINT(13.439561 52.54002)}\\\\
-und der WKB Repräsentation\\\\
+und\\\\
 \texttt{0101000020E6100000B131AF230EE12A40CC9717601F454A40}\\\\
+in der WKB Repräsentation.
+
 Der Wert \texttt{SRID} beinhaltet die ID des zu verwendenden Koordinatenreferenzsystems.
 Die ID \texttt{4326} entspricht dem häufig verwendeten Referenzsystem \texttt{WGS84}\footnote{http://spatialreference.org/ref/epsg/4326/}.  
 
@@ -28,11 +30,11 @@ GeoJSON\footnote{http://geojson.org} ist ein Format zur Repräsentation von geom
 Es verwendet ein ähnliches hierarchisches Klassenmodell. (vgl. \cite{WEB:GEOJSON:Spec:2008}).
 
 \subsubsection{Beispiel für das GeoJSON Format}
-Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord} entspricht der GeoJSON Repräsentation
+Ein Beispiel der GeoJSON Repräsentation eines Punktes mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord} ist in Listing \ref{example_geojson} ersichtlich.
 \lstset{
   numbers=none,
   caption=Beispiel eines geometrischen Punktes in GeoJSON Repräsentation,
-  label=
+  label=example_geojson
 }
 \begin{lstlisting}
   {
@@ -47,12 +49,12 @@ Ein Punkt mit den Koordinaten \texttt{13.439561 Ost} sowie \texttt{52.54002 Nord
 \section{OpenStreetMap Datenformat}
 \label{sec:appendix:osm:data}
 OpenStreetMap bietet seine Daten zum Download in einer Datei namens \textit{planet.osm}\footnote{http://planet.openstreetmap.org/} an. Diese Datei im XML-Format enthält den kompletten Datenbestand des OpenStreetMap Projekts. 
-Da diese Datei sehr groß ist (gepackt ca. 50GB) bieten andere Dienstleister wie zum Beispiel die Geofabrik GmbH Karlsruhe\footnote{http://www.geofabrik.de} auch kleinere Bereiche des Datenbestandes, zum Beispiel nur Deutschland, an.
+Da diese Datei sehr groß ist (gepackt ca. 50GB) bieten andere Dienstleister, wie zum Beispiel die Geofabrik GmbH Karlsruhe\footnote{http://www.geofabrik.de}, auch kleinere Bereiche des Datenbestandes, zum Beispiel nur Deutschland, an.
 Zur Speicherung der Daten werden die Elemente \textit{Nodes}, \textit{Ways} und \textit{Relations} verwendet. (vgl. \cite{WEB:OSM:Primitives:2015})
 \begin{compactitem}
   \item \textbf{Nodes}: geometrische Punkte, welche durch geographische Breite und Länge bestimmt sind
-  \item \textbf{Ways}: Verbindungen zwischen mehreren Nodes. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert
-  \item \textbf{Relations}: logische Gruppierungen mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen. 
+  \item \textbf{Ways}: Verbindungen zwischen mehreren Nodes. Hiermit werden zum Beispiel Straßen, Flüsse und vieles mehr modelliert.
+  \item \textbf{Relations}: Logische Gruppierungen mehrerer \textit{Nodes}, \textit{Ways} oder auch \textit{Relations}. Die Mitglieder einer Relation haben einen Bezug zueinander, zum Beispiel ein Wald mit seinen Lichtungen. 
 \end{compactitem}
 Die Bedeutung der Elemente wird durch Key-Value Paare, sogenannte \textit{Tags}, beschrieben.
 Hiermit wird beispielsweise festgelegt, ob ein Way eine Straße abbildet oder einen Fluss.
@@ -148,7 +150,8 @@ Im Listing \ref{code:osm_streets} Zeile 13 und 44 ist ein Beispiel dafür ersich
    \caption{Teilausschnitt einer Straße aus OpenStreetMap}
    \label{fig:osm_streets_1}
 \end{figure}
-Die Unterteilung einer Straße in mehrere Ways ist mitunter notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. die zulässige Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind. Sofern sich diese Daten im Straßenverlauf ändern, wird dies durch einen separates Way-Element wiedergegeben.
+Die Unterteilung einer Straße in mehrere Ways ist mitunter notwendig, da an einem Way-Element alle Daten des aktuellen Straßenabschnitts, wie z.B. die zulässige Höchstgeschwindigkeit, durch \textit{Tags} gespeichert sind.
+Sofern sich diese Daten im Straßenverlauf ändern, wird dies durch ein separates Way-Element wiedergegeben.
 Der hier gezeigte Teilabschnitt ist ebenfalls bereits in zwei separate Way-Elemente mit den ID´s \texttt{241186022} und \texttt{4615358} untergliedert (Abbildung \ref{fig:osm_streets_2}).
 \begin{figure}[htb]
   \centering
@@ -609,14 +612,14 @@ public class StringDistance {
 \section{Kennzahlen zur qualitativen Bewertung eines binären Klassifikators}
 \label{sec:appenix:fmeasure}
 
-Ein Klassifikator soll etwas bestimmtes aus gegebenen Merkmalen vorhersagen.
-Genauergesagt entspricht ein Klassifikator einer Abbildung eines Merkmalsraumes auf eine Menge von Klassen.
-Um Die Qualität dieser Vorhersage bzw. Abbildung zu bewerten, existieren Kennzahlen.
-Im folgenden wird auf die Kennzahlen \textit{Precision (Genauigkeit)}, \textit{Recall (Trefferquote)} und \textit{F-Maß} zur qualitativen Bewertung eines binären Klassifikators eingegangen.
+Ein Klassifikator soll etwas Bestimmtes aus gegebenen Merkmalen vorhersagen.
+Genauer gesagt entspricht ein Klassifikator einer Abbildung eines Merkmalsraumes auf eine Menge von Klassen.
+Um die Qualität dieser Vorhersage bzw. Abbildung zu bewerten, existieren Kennzahlen.
+Im Folgenden wird auf die Kennzahlen \textit{Precision (Genauigkeit)}, \textit{Recall (Trefferquote)} und \textit{F-Maß} zur qualitativen Bewertung eines binären Klassifikators eingegangen.
 
 Zunächst muss ein Datensatz mit bekannten Ergebnissen vorliegen.
 Dieser wird auch Gold-Standard genannt.
-Anhand des Gold-Standards können nun Vorhersagen mit bekannten Ergebnissen durchgeführt, und eine \textit{Wahrheitsmatrix} befüllt werden. In Tabelle \ref{tab:wahrheitsmatrix} ist eine Wahrheitsmatrix für die Beispielklassen \texttt{+} und \texttt{-} abgebildet. 
+Anhand des Gold-Standards können nun Vorhersagen mit bekannten Ergebnissen durchgeführt und eine \textit{Wahrheitsmatrix} befüllt werden. In Tabelle \ref{tab:wahrheitsmatrix} ist eine Wahrheitsmatrix für die Beispielklassen \texttt{+} und \texttt{-} abgebildet. 
 \begin{table}[]
 \centering
 \caption{Wahrheitsmatrix}
@@ -639,19 +642,19 @@ $$Precision = \frac{TP}{TP + FP}$$
 
 \subsubsection{Recall (Trefferquote)}
 
-Der \textit{Recall-Wert} gibt das Verhältnis zwischen allen korrekt als positiv vorhergesagten Objekten an der Gesamtheit der tatsächlich positiven Objekte an. Vereinfacht gesagt, wie viele positive Ergebnisse wurden wirklich gefunden.
+Der \textit{Recall-Wert} gibt das Verhältnis zwischen allen korrekt als positiv vorhergesagten Objekten zu der Gesamtheit der tatsächlich positiven Objekte an. Vereinfacht gesagt, wie viele positive Ergebnisse wurden wirklich gefunden.
 $$Recall = \frac{TP}{TP + FN}$$
 
 \subsubsection{F-Maß}
 
 Die Kennzahlen \textit{Precision} und \textit{Recall} alleine ergeben noch keine gute Abbildung der Vorhersagequalität.
-Beispielsweise lässt sich der Precision-Wert anheben, in dem der Klassifikator nur ein einzelnes Ergebnis als \texttt{+} korrekt klassifiziert.
-Alle als \texttt{+} vorhergesagten Werte währen dann in diesem Fall korrekt.
+Beispielsweise lässt sich der Precision-Wert anheben, indem der Klassifikator nur ein einzelnes Ergebnis als \texttt{+} korrekt klassifiziert.
+Alle als \texttt{+} vorhergesagten Werte wären dann in diesem Fall korrekt.
 Aus diesem Grund gibt es das \textit{F-Maß}, welche beide Werte miteinander vereint und als Qualitätskriterium verwendet werden kann.
 
 $$F = 2 * \frac{Precision * Recall}{Precision + Recall}$$
 
-Das hier erklärte Wissen wurde mir durch meinen Praktikumsbetreuer Philippe Thomas vermittelt und mit Hilfe von Wikipedia vertieft (vgl. \cite{ wiki:fmeasure}).
+Das in diesem Anhang \ref{sec:appenix:fmeasure} erklärte Wissen wurde mir durch meinen Praktikumsbetreuer Philippe Thomas vermittelt und mit Hilfe von Wikipedia vertieft (vgl. \cite{ wiki:fmeasure}).
 
 \section{Beispielausgabe des GTFS2OSMRailwayLinker}
 \label{sec:appendix:gtfs2osm_example}
